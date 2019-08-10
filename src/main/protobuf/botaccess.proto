@@ -1,0 +1,141 @@
+syntax = "proto2";
+
+package messages;
+
+option (scalapb.options) = {
+    import: "cqrs.TypeMappers._"
+    import: "scala.collection.JavaConversions._"
+};
+
+import "scalapb/scalapb.proto";
+
+message Access {
+    required string service = 1;
+    required string api = 2;
+}
+
+message Role {
+    required string role_name = 1;
+    repeated Access roles = 2;
+}
+
+message BotAccessSnapShot {
+    required int32 id = 1;
+    repeated string roles = 2;
+    repeated string premium_accesses = 3;
+}
+
+message BotAccessCommands {
+
+    message GrantPremiumAccess {
+        option (scalapb.message).extends = "botaccess.BotAccessCommand";
+
+        required int32 user_id = 1;
+        repeated string accesses = 2;
+    }
+
+    message RevokePremiumAccess {
+        option (scalapb.message).extends = "botaccess.BotAccessCommand";
+
+        required int32 user_id = 1;
+        repeated string accesses = 2;
+
+    }
+
+    message GrantAccess {
+        option (scalapb.message).extends = "botaccess.BotAccessCommand";
+
+        required int32 user_id = 1;
+        repeated string roles = 2;
+    }
+
+    message RevokeAccess {
+        option (scalapb.message).extends = "botaccess.BotAccessCommand";
+
+        required int32 user_id = 1;
+        repeated string roles = 2;
+    }
+}
+
+message BotAccessQueries {
+
+    message HasAccess {
+        option (scalapb.message).extends = "botaccess.BotAccessQuery";
+
+        required int32 user_id = 1;
+        required string service = 2;
+        required string api = 3;
+    }
+
+    message HasAccessResponse {
+        required bool hasAccess = 1;
+    }
+
+    message GetRoles {
+        option (scalapb.message).extends = "botaccess.BotAccessQuery";
+
+        required int32 user_id = 1;
+    }
+
+    message GetRolesResponse {
+        repeated string roles = 1;
+    }
+
+
+    message HasPremiumAccess {
+        option (scalapb.message).extends = "botaccess.BotAccessQuery";
+
+        required int32 user_id = 1;
+        required string service = 2;
+        required string api = 3;
+    }
+
+    message HasPremiumAccessResponse {
+        required bool hasAccess = 1;
+    }
+
+    message GetPremiumAccess {
+        option (scalapb.message).extends = "botaccess.BotAccessQuery";
+
+        required int32 user_id = 1;
+    }
+
+    message GetPremiumAccessResponse {
+        repeated string accesses = 1;
+    }
+
+}
+
+message BotAccessEvents {
+
+    message AccessGranted {
+        option (scalapb.message).extends = "botaccess.BotAccessEvent";
+
+        required int64 ts = 2 [(scalapb.field).type = "java.time.Instant"];
+        repeated string roles = 1;
+    }
+
+    message AccessRevoked {
+        option (scalapb.message).extends = "botaccess.BotAccessEvent";
+
+        required int64 ts = 2 [(scalapb.field).type = "java.time.Instant"];
+        repeated string roles = 1;
+    }
+
+    message PremiumAccessGranted {
+        option (scalapb.message).extends = "botaccess.BotAccessEvent";
+
+        required int64 ts = 2 [(scalapb.field).type = "java.time.Instant"];
+        repeated string premium_accesses = 1;
+    }
+
+    message PremiumAccessRevoked {
+        option (scalapb.message).extends = "botaccess.BotAccessEvent";
+
+        required int64 ts = 2 [(scalapb.field).type = "java.time.Instant"];
+        repeated string premium_accesses = 1;
+    }
+
+}
+
+message ResponseVoid {}

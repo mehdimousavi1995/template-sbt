@@ -1,0 +1,6 @@
+[0m[[0m[0minfo[0m] [0m[0m[32mHttpServiceSpec:[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mShortLink service[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should return duplicate key when short link already exists[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should return url is not valid error[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should return short_link url[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should redirect us to actual link[0m[0m

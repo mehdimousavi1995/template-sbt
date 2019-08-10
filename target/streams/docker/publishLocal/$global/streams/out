@@ -1,0 +1,49 @@
+[0m[[0m[0mdebug[0m] [0m[0mExecuting Native docker build --force-rm -t mehdimousavi1995/short_link:0.1.2 -t mehdimousavi1995/short_link:latest .[0m
+[0m[[0m[0mdebug[0m] [0m[0mWorking directory /home/mehdi/IdeaProjects/template/target/docker/stage[0m
+[0m[[0m[0minfo[0m] [0m[0mSending build context to Docker daemon  96.22MB[0m
+[0m[[0m[0minfo[0m] [0m[0mStep 1/13 : FROM openjdk:8-jre-alpine as stage0[0m
+[0m[[0m[0minfo[0m] [0m[0m ---> f7a292bbb70c[0m
+[0m[[0m[0minfo[0m] [0m[0mStep 2/13 : WORKDIR /opt/docker[0m
+[0m[[0m[0minfo[0m] [0m[0m ---> Using cache[0m
+[0m[[0m[0minfo[0m] [0m[0m ---> 21e69fac35c1[0m
+[0m[[0m[0minfo[0m] [0m[0mStep 3/13 : COPY opt /opt[0m
+[0m[[0m[0minfo[0m] [0m[0m ---> 7bf6d5c65b49[0m
+[0m[[0m[0minfo[0m] [0m[0mStep 4/13 : USER root[0m
+[0m[[0m[0minfo[0m] [0m[0m ---> Running in 7975343a8c05[0m
+[0m[[0m[0minfo[0m] [0m[0mRemoving intermediate container 7975343a8c05[0m
+[0m[[0m[0minfo[0m] [0m[0m ---> a01e41e624e6[0m
+[0m[[0m[0minfo[0m] [0m[0mStep 5/13 : RUN ["chmod", "-R", "u=rX,g=rX", "/opt/docker"][0m
+[0m[[0m[0minfo[0m] [0m[0m ---> Running in 8cda5c14c942[0m
+[0m[[0m[0minfo[0m] [0m[0mRemoving intermediate container 8cda5c14c942[0m
+[0m[[0m[0minfo[0m] [0m[0m ---> 70757dc8b9f5[0m
+[0m[[0m[0minfo[0m] [0m[0mStep 6/13 : RUN ["chmod", "u+x,g+x", "/opt/docker/bin/template"][0m
+[0m[[0m[0minfo[0m] [0m[0m ---> Running in bb8598131c6f[0m
+[0m[[0m[0minfo[0m] [0m[0mRemoving intermediate container bb8598131c6f[0m
+[0m[[0m[0minfo[0m] [0m[0m ---> 3fd9e95ade78[0m
+[0m[[0m[0minfo[0m] [0m[0mStep 7/13 : FROM openjdk:8-jre-alpine[0m
+[0m[[0m[0minfo[0m] [0m[0m ---> f7a292bbb70c[0m
+[0m[[0m[0minfo[0m] [0m[0mStep 8/13 : WORKDIR /opt/docker[0m
+[0m[[0m[0minfo[0m] [0m[0m ---> Using cache[0m
+[0m[[0m[0minfo[0m] [0m[0m ---> 21e69fac35c1[0m
+[0m[[0m[0minfo[0m] [0m[0mStep 9/13 : COPY --from=stage0 --chown=daemon:root /opt/docker /opt/docker[0m
+[0m[[0m[0minfo[0m] [0m[0m ---> 19759e5fb6eb[0m
+[0m[[0m[0minfo[0m] [0m[0mStep 10/13 : EXPOSE 80[0m
+[0m[[0m[0minfo[0m] [0m[0m ---> Running in 2368d7d72c89[0m
+[0m[[0m[0minfo[0m] [0m[0mRemoving intermediate container 2368d7d72c89[0m
+[0m[[0m[0minfo[0m] [0m[0m ---> 989226779eaf[0m
+[0m[[0m[0minfo[0m] [0m[0mStep 11/13 : USER daemon[0m
+[0m[[0m[0minfo[0m] [0m[0m ---> Running in 8402b51a466d[0m
+[0m[[0m[0minfo[0m] [0m[0mRemoving intermediate container 8402b51a466d[0m
+[0m[[0m[0minfo[0m] [0m[0m ---> 2808accc321a[0m
+[0m[[0m[0minfo[0m] [0m[0mStep 12/13 : ENTRYPOINT ["/opt/docker/bin/template"][0m
+[0m[[0m[0minfo[0m] [0m[0m ---> Running in 732439fa84e1[0m
+[0m[[0m[0minfo[0m] [0m[0mRemoving intermediate container 732439fa84e1[0m
+[0m[[0m[0minfo[0m] [0m[0m ---> 110057e43d86[0m
+[0m[[0m[0minfo[0m] [0m[0mStep 13/13 : CMD [][0m
+[0m[[0m[0minfo[0m] [0m[0m ---> Running in ffa9d8de82f9[0m
+[0m[[0m[0minfo[0m] [0m[0mRemoving intermediate container ffa9d8de82f9[0m
+[0m[[0m[0minfo[0m] [0m[0m ---> 9b536d94a972[0m
+[0m[[0m[0minfo[0m] [0m[0mSuccessfully built 9b536d94a972[0m
+[0m[[0m[0minfo[0m] [0m[0mSuccessfully tagged mehdimousavi1995/short_link:0.1.2[0m
+[0m[[0m[0minfo[0m] [0m[0mSuccessfully tagged mehdimousavi1995/short_link:latest[0m
+[0m[[0m[0minfo[0m] [0m[0mBuilt image mehdimousavi1995/short_link with tags [0.1.2, latest][0m
