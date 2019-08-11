@@ -5,10 +5,7 @@ import akka.stream.ActorMaterializer
 import botaccess.{BotAccessExtension, BotAccessProcessor}
 import http.HttpServiceRoutes
 import it.sauronsoftware.cron4j.Scheduler
-import org.postgresql.util.PSQLException
 import persist.postgres.PostgresDBExtension
-import persist.postgres.model.User
-import persist.postgres.repos.UserRepo
 import persist.redis.RedisExtension
 import sdk.CustomConfig
 

@@ -10,6 +10,5 @@ final case class User(
                        username: String,
                        fullName: String,
                        password: String,
-                       reputation: Int,
                        createdAt: LocalDateTime = TimeUtils.nowTehran
                )

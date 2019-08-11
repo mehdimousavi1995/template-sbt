@@ -19,7 +19,7 @@ trait HttpRequestHandler extends AuthenticationHelper with FutureResult[HttpErro
   def createUser(user: UserRequest): Future[HttpError Either SuccessMessage] = {
     val createdAt = TimeUtils.nowTehran
     (for {
-      _ <- fromFuture(_ => DuplicatePrimaryKey)(pdb.run(UserRepo.create(User(user.fullName, user.username, hash(user.password), createdAt))))
+      _ <- fromFuture(_ => DuplicatePrimaryKey)(pdb.run(UserRepo.create(User(user.username, user.fullName, hash(user.password), createdAt))))
     } yield SuccessMessage(createdAt)).value
   }
 
@@ -27,10 +27,9 @@ trait HttpRequestHandler extends AuthenticationHelper with FutureResult[HttpErro
 
   def login(request: LoginRequest): Future[HttpError Either LoginResponse] = {
     (for {
-      _ <- fromFutureBoolean(WrongUsernameOrPassword)(pdb.run(UserRepo.authenticate(request.username, request.password)))
+      _ <- fromFutureBoolean(WrongUsernameOrPassword)(pdb.run(UserRepo.authenticate(request.username, hash(request.password))))
       token = generateToken()
-      redisKey = request.username + token
-      _ <- fromFuture(redisExt.psetex(redisKey, expirationTime, token))
+      _ <- fromFuture(redisExt.psetex(request.username, expirationTime, token))
     } yield LoginResponse(token, "AUTHENTICATED")).value
   }
 

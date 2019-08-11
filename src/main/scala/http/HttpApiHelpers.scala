@@ -21,8 +21,6 @@ trait HttpApiHelpers {
     }
   }
 
-
-
   val SignedLongNumber: PathMatcher1[Long] =
     PathMatcher("""[+-]?\d+""".r) flatMap { string ⇒
       try Some(java.lang.Long.parseLong(string))

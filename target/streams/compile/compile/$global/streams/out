@@ -1,4 +1,6 @@
-[0m[[0m[33mwarn[0m] [0m[0m/home/mehdi/IdeaProjects/template/src/main/scala/Main.scala:46:13: a pure expression does nothing in statement position; multiline expressions may require enclosing parentheses[0m
-[0m[[0m[33mwarn[0m] [0m[0m  botAccess.bap[0m
-[0m[[0m[33mwarn[0m] [0m[0m            ^[0m
-[0m[[0m[33mwarn[0m] [0m[0mone warning found[0m
+[0m[[0m[31merror[0m] [0m[0m/home/mehdi/IdeaProjects/template/src/main/scala/http/HttpRequestHandler.scala:22:129: type mismatch;[0m
+[0m[[0m[31merror[0m] [0m[0m found   : java.time.LocalDateTime[0m
+[0m[[0m[31merror[0m] [0m[0m required: Int[0m
+[0m[[0m[31merror[0m] [0m[0m      _ <- fromFuture(_ => DuplicatePrimaryKey)(pdb.run(UserRepo.create(User(user.fullName, user.username, hash(user.password), createdAt))))[0m
+[0m[[0m[31merror[0m] [0m[0m                                                                                                                                ^[0m
+[0m[[0m[31merror[0m] [0m[0mone error found[0m

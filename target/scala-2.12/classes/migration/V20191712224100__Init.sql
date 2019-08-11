@@ -24,6 +24,5 @@ CREATE TABLE IF NOT EXISTS users(
   full_name varchar(256),
   password varchar(256),
   created_at TIMESTAMP,
-  repuattion int default 0,
   PRIMARY KEY (username)
 );

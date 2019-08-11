@@ -6,6 +6,7 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
+import akka.http.scaladsl.server.directives.Credentials
 import akka.stream.ActorMaterializer
 import http.entities.{LoginRequest, UserRequest}
 import org.bouncycastle.util.encoders.Base64
@@ -27,7 +28,7 @@ class HttpServiceRoutes()(implicit val system: ActorSystem) extends HttpHandler
   implicit val ec: ExecutionContextExecutor = system.dispatcher
   val host: String = system.settings.config.getString("http.listen-address.host")
   val port: Int = system.settings.config.getInt("http.listen-address.port")
-  
+
 
   protected val log: LoggingAdapter = system.log
   protected val pdb = PostgresDBExtension(system).db
@@ -54,15 +55,23 @@ class HttpServiceRoutes()(implicit val system: ActorSystem) extends HttpHandler
     } ~ path("test") {
       // TODO remeber to change this api
       get {
-        extractCredentials { credentials =>
-          val optToken = Try(credentials.map(x ⇒ new String(Base64.decode(x.token())).split(":")(1))).getOrElse(Some(""))
-          authenticateBasicAsync(realm = "secure site", cre => authenticator(optToken, cre, ip)) { username =>
-            complete("thank you")
-          }
+        authenticateOAuth2Async(realm = "api", oAuthAuthenticator) { validToken =>
+          complete(s"It worked! user = $validToken")
         }
       }
     }
   }
+
+  def oAuthAuthenticator(credentials: Credentials): Future[Option[String]] =
+    credentials match {
+      case p@Credentials.Provided(identifier) =>
+        redisExt.get(identifier).map { value =>
+          if (p.verify(value.getOrElse("")))
+            Some(identifier)
+          else None
+        }
+      case _ => Future.successful(None)
+    }
 
   def start(): Future[Http.ServerBinding] = {
     Http().bindAndHandle(routes, host, port)

@@ -19,12 +19,10 @@ final class UserRepo(tag: Tag) extends Table[User](tag, "users") {
 
   def password: Rep[String] = column[String]("password")
 
-  def reputation = column[Int]("counter")
-
   def createdAt: Rep[LocalDateTime] = column[LocalDateTime]("created_at")
 
 
-  def * : ProvenShape[User] = (username, fullName, password, reputation, createdAt) <> (User.tupled, User.unapply)
+  def * : ProvenShape[User] = (username, fullName, password, createdAt) <> (User.tupled, User.unapply)
 
 }
 
@@ -46,7 +44,4 @@ object UserRepo {
   def notExists(username: String)(implicit ec: ExecutionContextExecutor): DBIOAction[Boolean, NoStream, Effect.Read] =
     exists(username).map(!_)
 
-
-  def increment(username: String) =
-    sql"""update users set reputation = reputation + 1 where username = $username""".as[Int]
 }
