@@ -8,6 +8,7 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.server.directives.Credentials
 import akka.stream.ActorMaterializer
+import homeee.HomeExtension
 import http.entities.{HomeDTO, LoginRequest, UserRequest}
 import persist.cassandra.home.HomeService
 import persist.cassandra.{AppDatabase, AppDatabaseProvider, CassandraConnection}
@@ -35,8 +36,10 @@ class HttpServiceRoutes()(implicit val system: ActorSystem) extends HttpHandler
     override def database: AppDatabase = CassandraDatabase
   }
 
-  val homeService = new HomeService with CassandraDatabaseProvider
   val partitionKey = "partition-1"
+  val homeService = new HomeService with CassandraDatabaseProvider
+
+  val homeExt = HomeExtension(system)
 
   protected val log: LoggingAdapter = system.log
   protected val pdb = PostgresDBExtension(system).db

@@ -40,7 +40,7 @@ object Main extends App {
   HomeProcessor.register()
 
   val botAccess = HomeExtension(system)
-  botAccess.bap
+  botAccess.hp
 
 
 }

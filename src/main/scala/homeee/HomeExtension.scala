@@ -8,9 +8,9 @@ import scala.concurrent.Future
 
 trait HomeExtension extends Extension {
 
-  val bap: ActorRef
+  val hp: ActorRef
 
-  def createHome(homeId: Int, owner: Owner, address: String, houseArea: Int, createdAt: Long): Future[Any]
+  def createHome(homeId: String, owner: Owner, address: String, houseArea: Int, createdAt: Long): Future[Any]
 
 
 }

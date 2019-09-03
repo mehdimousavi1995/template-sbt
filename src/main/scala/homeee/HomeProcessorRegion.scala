@@ -10,14 +10,14 @@ object HomeProcessorRegion {
 
   private def extractEntityId(system: ActorSystem): ShardRegion.ExtractEntityId = {
     {
-      case h: HomeCommand ⇒ (h.homeId.toString, h)
-      case q: HomeQuery   ⇒ (q.homeId.toString, q)
+      case h: HomeCommand ⇒ (h.homeId, h)
+      case q: HomeQuery   ⇒ (q.homeId, q)
     }
   }
 
   private def extractShardId(system: ActorSystem): ShardRegion.ExtractShardId = {
-    case h: HomeCommand   ⇒ (h.homeId % 100).toString
-    case q: HomeQuery ⇒ (q.homeId % 100).toString
+    case h: HomeCommand   ⇒ (h.homeId.hashCode % 100).toString
+    case q: HomeQuery ⇒ (q.homeId.hashCode % 100).toString
   }
 
   val typeName = "BotAccessProcessor"

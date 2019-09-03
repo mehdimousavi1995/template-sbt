@@ -1,11 +1,4 @@
 [0m[[0m[33mwarn[0m] [0m[0m/home/mehdi/IdeaProjects/template/src/main/scala/Main.scala:43:13: a pure expression does nothing in statement position; multiline expressions may require enclosing parentheses[0m
-[0m[[0m[33mwarn[0m] [0m[0m  botAccess.bap[0m
+[0m[[0m[33mwarn[0m] [0m[0m  botAccess.hp[0m
 [0m[[0m[33mwarn[0m] [0m[0m            ^[0m
-[0m[[0m[33mwarn[0m] [0m[0m/home/mehdi/IdeaProjects/template/src/main/scala/persist/cassandra/CassandraConnection.scala:4:43: imported `CassandraConnection' is permanently hidden by definition of object CassandraConnection in package cassandra[0m
-[0m[[0m[33mwarn[0m] [0m[0mimport com.outworkers.phantom.connectors.{CassandraConnection, ContactPoint}[0m
-[0m[[0m[33mwarn[0m] [0m[0m                                          ^[0m
-[0m[[0m[33mwarn[0m] [0m[0mthere were 5 deprecation warnings (since 0.4.1)[0m
-[0m[[0m[33mwarn[0m] [0m[0mthere was one deprecation warning (since 2.11.0)[0m
-[0m[[0m[33mwarn[0m] [0m[0mthere was one deprecation warning (since 2.12.0)[0m
-[0m[[0m[33mwarn[0m] [0m[0mthere were 7 deprecation warnings in total; re-run with -deprecation for details[0m
-[0m[[0m[33mwarn[0m] [0m[0m6 warnings found[0m
+[0m[[0m[33mwarn[0m] [0m[0mone warning found[0m

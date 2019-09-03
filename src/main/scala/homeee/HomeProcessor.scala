@@ -15,11 +15,11 @@ import messages.homeee.homessages.{Device, HomeCommands, HomeEvents, HomeSnapSho
 import scala.concurrent.{ExecutionContext, Future}
 
 trait HomeCommand {
-  val homeId: Int
+  val homeId: String
 }
 
 trait HomeQuery {
-  val homeId: Int
+  val homeId: String
 }
 
 trait HomeEvent extends TaggedEvent {
@@ -42,7 +42,7 @@ object HomeProcessor {
       85952 → classOf[HomeSnapShot]
     )
 
-  def persistenceIdFor(botId: Int): String = s"BotAccess-$botId"
+  def persistenceIdFor(homeId: String): String = s"Home-$homeId"
 
   def props: Props = Props(classOf[HomeProcessor])
 }
@@ -60,12 +60,12 @@ private final class HomeProcessor
   protected implicit val ec: ExecutionContext = context.dispatcher
   protected implicit val timeout: Timeout = Timeout(60, TimeUnit.SECONDS)
   val baseRoleConf = "services.bot.access."
-  protected val botUserId: Int = self.path.name.toInt
+  protected val homeUserId: String = self.path.name
 
 
-  override def persistenceId: String = HomeProcessor.persistenceIdFor(botUserId)
+  override def persistenceId: String = HomeProcessor.persistenceIdFor(homeUserId)
 
-  override protected def getInitialState: HomeState = HomeState.initial(botUserId)
+  override protected def getInitialState: HomeState = HomeState.initial(homeUserId)
 
   override protected def saveSnapshotIfNeeded(): Unit = {
     super.saveSnapshotIfNeeded()

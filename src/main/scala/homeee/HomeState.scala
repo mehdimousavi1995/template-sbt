@@ -6,7 +6,7 @@ import messages.homeee.homessages.HomeEvents.HomeCreated
 import messages.homeee.homessages.{Device, HomeSnapShot, Owner}
 private[homeee] object HomeState {
 
-  def initial(homeId: Int) = HomeState(
+  def initial(homeId: String) = HomeState(
     homeId,
     Owner("", "", "", 0),
     Seq.empty[Device],
@@ -16,7 +16,7 @@ private[homeee] object HomeState {
 }
 
 private[homeee] final case class HomeState(
-  homeId: Int,
+  homeId: String,
   owner: Owner,
   devices: Seq[Device],
   address: String,
