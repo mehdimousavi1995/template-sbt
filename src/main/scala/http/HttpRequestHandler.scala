@@ -3,6 +3,7 @@ package http
 import java.time.LocalDateTime
 
 import http.entities._
+import persist.cassandra.home.Home
 import persist.postgres.model.User
 import persist.postgres.repos.UserRepo
 import util.{AuthenticationHelper, FutureResult, TimeUtils}
@@ -33,6 +34,18 @@ trait HttpRequestHandler extends AuthenticationHelper with FutureResult[HttpErro
     } yield LoginResponse(token, "AUTHENTICATED")).value
   }
 
+
+  def createHome(request: HomeDTO): Future[HttpError Either SuccessResponse] = {
+    (for {
+      _ <- fromFuture(homeService.store(
+        partitionKey, Home(
+          address = request.address,
+          houseArea = request.houseArea,
+          ownerId = request.ownerId
+        )
+      ))
+    } yield SuccessResponse()).value
+  }
 
 
 }

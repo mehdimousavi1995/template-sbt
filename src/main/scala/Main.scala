@@ -2,7 +2,7 @@
 import akka.actor.ActorSystem
 import akka.cluster.Cluster
 import akka.stream.ActorMaterializer
-import botaccess.{BotAccessExtension, BotAccessProcessor}
+import homeee.{HomeExtension, HomeProcessor}
 import http.HttpServiceRoutes
 import it.sauronsoftware.cron4j.Scheduler
 import persist.postgres.PostgresDBExtension
@@ -37,9 +37,9 @@ object Main extends App {
   })
   s.start()
 
-  BotAccessProcessor.register()
+  HomeProcessor.register()
 
-  val botAccess = BotAccessExtension(system)
+  val botAccess = HomeExtension(system)
   botAccess.bap
 
 

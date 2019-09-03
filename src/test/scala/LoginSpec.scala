@@ -14,6 +14,7 @@ class LoginSpec extends WordSpec with Matchers with ScalatestRouteTest with Json
     val config: Config = CustomConfig.load()
     ActorSystem("template", config)
   }
+
   val httpHandler = new HttpServiceRoutes()
 
   import spray.json._
@@ -22,7 +23,8 @@ class LoginSpec extends WordSpec with Matchers with ScalatestRouteTest with Json
 
   "Login service" should {
     "verify username and password" in {
-      Post("/auths").withEntity(ContentTypes.`application/json`, loginRequest) ~> httpHandler.routes ~> check {
+      Post("/auths")
+        .withEntity(ContentTypes.`application/json`, loginRequest) ~> httpHandler.routes ~> check {
         println(responseEntity)
         status shouldEqual StatusCodes.Unauthorized
       }

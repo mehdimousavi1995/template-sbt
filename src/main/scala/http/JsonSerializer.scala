@@ -12,4 +12,10 @@ trait JsonSerializer extends HttpImplicitConversions {
   implicit val loginRequestFormat: RootJsonFormat[LoginRequest] = jsonFormat2(LoginRequest)
   implicit val loginResponseFormat: RootJsonFormat[LoginResponse] = jsonFormat2(LoginResponse)
 
+
+  implicit val homeDTOFormat: RootJsonFormat[HomeDTO] = jsonFormat3(HomeDTO)
+  implicit val ownerDTOFormat: RootJsonFormat[OwnerDTO] = jsonFormat3(OwnerDTO)
+  implicit val deviceDTOFormat: RootJsonFormat[DeviceDTO] = jsonFormat3(DeviceDTO)
+  implicit val responseFormat: RootJsonFormat[SuccessResponse] = jsonFormat1(SuccessResponse)
+
 }

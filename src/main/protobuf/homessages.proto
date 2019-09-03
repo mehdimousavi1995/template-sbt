@@ -1,0 +1,74 @@
+syntax = "proto2";
+
+package messages.homeee;
+
+option (scalapb.options) = {
+    import: "cqrs.TypeMappers._"
+    import: "scala.collection.JavaConversions._"
+};
+
+import "scalapb/scalapb.proto";
+
+
+message Owner {
+    required string owner_id = 1;
+    required string first_name = 2;
+    required string last_name = 3;
+    required int32 telegram_user_id = 4;
+}
+
+message Device {
+    required string device_id = 1;
+    required string device_name = 2;
+    required string device_type = 3;
+    required string home_id = 4;
+}
+
+message HomeSnapShot {
+    required int32 home_id = 1;
+    required Owner owner = 2;
+    repeated Device devices = 3;
+    required string address = 4;
+    required int32 house_area = 5;
+}
+
+message HomeCommands {
+
+    message CreateHome {
+        required int32 home_id = 1;
+        option (scalapb.message).extends = "homeee.HomeCommand";
+        required Owner owner = 2;
+        required string address = 3;
+        required int32 house_area = 5;
+    }
+
+    message CreatedHomeResponse {
+    }
+
+}
+
+message HomeQuries {
+    message GetHome {
+        required int32 home_id = 1;
+        option (scalapb.message).extends = "homeee.HomeQuery";
+    }
+
+    message GetHomeResponse {
+
+    }
+
+}
+
+message HomeEvents {
+    message HomeCreated {
+        option (scalapb.message).extends = "homeee.HomeEvent";
+        required int32 home_id = 1;
+        required int64 ts = 2 [(scalapb.field).type = "java.time.Instant"];
+        required Owner owner = 3;
+        required string address = 4;
+        required int32 house_area = 5;
+    }
+}
+
+message ResponseVoid {
+}

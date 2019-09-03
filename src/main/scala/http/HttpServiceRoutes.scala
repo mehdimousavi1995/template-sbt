@@ -8,14 +8,14 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.server.directives.Credentials
 import akka.stream.ActorMaterializer
-import http.entities.{LoginRequest, UserRequest}
-import org.bouncycastle.util.encoders.Base64
+import http.entities.{HomeDTO, LoginRequest, UserRequest}
+import persist.cassandra.home.HomeService
+import persist.cassandra.{AppDatabase, AppDatabaseProvider, CassandraConnection}
 import persist.postgres.PostgresDBExtension
 import persist.redis.RedisExtension
 import util.AuthenticationHelper
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
-import scala.util.Try
 
 class HttpServiceRoutes()(implicit val system: ActorSystem) extends HttpHandler
   with HttpImplicitConversions
@@ -29,6 +29,14 @@ class HttpServiceRoutes()(implicit val system: ActorSystem) extends HttpHandler
   val host: String = system.settings.config.getString("http.listen-address.host")
   val port: Int = system.settings.config.getInt("http.listen-address.port")
 
+  object CassandraDatabase extends AppDatabase(CassandraConnection.connection)
+
+  trait CassandraDatabaseProvider extends AppDatabaseProvider {
+    override def database: AppDatabase = CassandraDatabase
+  }
+
+  val homeService = new HomeService with CassandraDatabaseProvider
+  val partitionKey = "partition-1"
 
   protected val log: LoggingAdapter = system.log
   protected val pdb = PostgresDBExtension(system).db
@@ -36,7 +44,16 @@ class HttpServiceRoutes()(implicit val system: ActorSystem) extends HttpHandler
 
 
   override def routes: Route = extractClientIP { ip =>
-    path("users") {
+
+    path("houses") {
+      post {
+        entity(as[HomeDTO]) { request =>
+          onComplete(createHome(request)) {
+            generateHttpResponse("create home")
+          }
+        }
+      }
+    } ~ path("users") {
       post {
         entity(as[UserRequest]) { request =>
           onComplete(createUser(request)) {
