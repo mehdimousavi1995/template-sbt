@@ -1,8 +1,0 @@
-[0m[[0m[31merror[0m] [0m[0m/home/mehdi/IdeaProjects/template/src/test/scala/BaseAppSuite.scala:12:7: trait BaseAppSuite inherits conflicting members:[0m
-[0m[[0m[31merror[0m] [0m[0m  method info in trait WordSpecLike of type => org.scalatest.Informer  and[0m
-[0m[[0m[31merror[0m] [0m[0m  method info in trait FlatSpecLike of type => org.scalatest.Informer[0m
-[0m[[0m[31merror[0m] [0m[0m(Note: this can be resolved by declaring an override in trait BaseAppSuite.);[0m
-[0m[[0m[31merror[0m] [0m[0m other members with override errors are: note, alert, markup, registerTest, registerIgnoredTest, it, they, behave, styleName[0m
-[0m[[0m[31merror[0m] [0m[0mtrait BaseAppSuite extends WordSpec[0m
-[0m[[0m[31merror[0m] [0m[0m      ^[0m
-[0m[[0m[31merror[0m] [0m[0mone error found[0m

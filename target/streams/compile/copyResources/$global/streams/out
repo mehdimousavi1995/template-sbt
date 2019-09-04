@@ -1,7 +1,0 @@
-[0m[[0m[0mdebug[0m] [0m[0mCopy resource mappings: [0m
-[0m[[0m[0mdebug[0m] [0m[0m	(/home/mehdi/IdeaProjects/template/src/main/resources/logback.xml,/home/mehdi/IdeaProjects/template/target/scala-2.12/classes/logback.xml)[0m
-[0m[[0m[0mdebug[0m] [0m[0m	(/home/mehdi/IdeaProjects/template/src/main/resources/migration,/home/mehdi/IdeaProjects/template/target/scala-2.12/classes/migration)[0m
-[0m[[0m[0mdebug[0m] [0m[0m	(/home/mehdi/IdeaProjects/template/src/main/resources/migration/V20191712224100__Init.sql,/home/mehdi/IdeaProjects/template/target/scala-2.12/classes/migration/V20191712224100__Init.sql)[0m
-[0m[[0m[0mdebug[0m] [0m[0m	(/home/mehdi/IdeaProjects/template/src/main/resources/migration/jndi.properties,/home/mehdi/IdeaProjects/template/target/scala-2.12/classes/migration/jndi.properties)[0m
-[0m[[0m[0mdebug[0m] [0m[0m	(/home/mehdi/IdeaProjects/template/src/main/resources/reference.conf,/home/mehdi/IdeaProjects/template/target/scala-2.12/classes/reference.conf)[0m
-[0m[[0m[0mdebug[0m] [0m[0m	(/home/mehdi/IdeaProjects/template/src/main/resources/application.conf,/home/mehdi/IdeaProjects/template/target/scala-2.12/classes/application.conf)[0m

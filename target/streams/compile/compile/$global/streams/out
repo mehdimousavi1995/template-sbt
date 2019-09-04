@@ -1,4 +1,0 @@
-[0m[[0m[33mwarn[0m] [0m[0m/home/mehdi/IdeaProjects/template/src/main/scala/Main.scala:43:13: a pure expression does nothing in statement position; multiline expressions may require enclosing parentheses[0m
-[0m[[0m[33mwarn[0m] [0m[0m  botAccess.hp[0m
-[0m[[0m[33mwarn[0m] [0m[0m            ^[0m
-[0m[[0m[33mwarn[0m] [0m[0mone warning found[0m

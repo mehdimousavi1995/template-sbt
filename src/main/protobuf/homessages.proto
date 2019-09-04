@@ -17,22 +17,54 @@ message Owner {
     required int32 telegram_user_id = 4;
 }
 
-message Device {
+
+enum OnOrOffStatus {
+    OFF = 0;
+    ON = 1;
+    BROKEN = 2;
+}
+
+
+message AllDevices {
+    oneof value {
+        LampDevice lamp_device = 1;
+        HeatingCooler heating_cooler = 2;
+    }
+}
+
+message LampDevice {
     required string device_id = 1;
     required string device_name = 2;
-    required string device_type = 3;
-    required string home_id = 4;
+    required OnOrOffStatus on_or_off_status = 3;
+
+    option (scalapb.message).extends = "homeee.Device";
+}
+
+enum HeatingCoolerState {
+    COOLER = 0;
+    HEATING = 1;
+}
+
+
+message HeatingCooler {
+    required string device_id = 1;
+    required string device_name = 2;
+    required OnOrOffStatus on_or_off_status = 3;
+    required HeatingCoolerState heating_cooler_state = 4;
+
+    option (scalapb.message).extends = "homeee.Device";
 }
 
 message HomeSnapShot {
     required string home_id = 1;
     required Owner owner = 2;
-    repeated Device devices = 3;
+    repeated AllDevices devices = 3;
     required string address = 4;
     required int32 house_area = 5;
 }
 
 message HomeCommands {
+
     message CreateHome {
         required string home_id = 1;
         option (scalapb.message).extends = "homeee.HomeCommand";
@@ -40,8 +72,22 @@ message HomeCommands {
         required string address = 3;
         required int32 house_area = 5;
     }
+
     message CreatedHomeResponse {
     }
+
+    message AddDevice {
+        required string home_id = 1;
+        option (scalapb.message).extends = "homeee.HomeCommand";
+        required AllDevices device = 2;
+    }
+
+    message RemoveDevice {
+        required string home_id = 1;
+        option (scalapb.message).extends = "homeee.HomeCommand";
+        required string device_id = 2;
+    }
+
 
 }
 
@@ -50,9 +96,18 @@ message HomeQuries {
         required string home_id = 1;
         option (scalapb.message).extends = "homeee.HomeQuery";
     }
-
     message GetHomeResponse {
 
+    }
+
+    message GetDevice {
+        required string home_id = 1;
+        option (scalapb.message).extends = "homeee.HomeQuery";
+        required string device_id = 2;
+    }
+
+    message GetDeviceResponse {
+        required AllDevices device = 1;
     }
 
 }
@@ -65,6 +120,18 @@ message HomeEvents {
         required Owner owner = 3;
         required string address = 4;
         required int32 house_area = 5;
+    }
+
+    message DeviceAdded {
+        option (scalapb.message).extends = "homeee.HomeEvent";
+        required AllDevices device = 1;
+        required int64 ts = 2 [(scalapb.field).type = "java.time.Instant"];
+    }
+
+    message DeviceRemoved {
+        option (scalapb.message).extends = "homeee.HomeEvent";
+        required string device_id = 1;
+        required int64 ts = 2 [(scalapb.field).type = "java.time.Instant"];
     }
 }
 

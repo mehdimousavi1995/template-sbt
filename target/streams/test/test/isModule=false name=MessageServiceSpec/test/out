@@ -1,4 +1,0 @@
-[0m[[0m[0minfo[0m] [0m[0m[32mMessageServiceSpec:[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32mmessage service[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32m- should store and find by id[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32m- should batch store and find by partition[0m[0m
