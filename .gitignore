@@ -6,3 +6,4 @@ conf/
 cicdtemp/
 uploads/
 target
+template-build/target

@@ -1,11 +1,13 @@
 
+
 import akka.actor.ActorSystem
 import akka.cluster.Cluster
 import akka.stream.ActorMaterializer
 import homeee.{HomeExtension, HomeProcessor}
 import http.HttpServiceRoutes
-import it.sauronsoftware.cron4j.Scheduler
+import kafka.{KafkaConsumer, KafkaExtension}
 import persist.postgres.PostgresDBExtension
+//import kafka.{KafkaConsumer, KafkaExtension}
 import persist.redis.RedisExtension
 import sdk.CustomConfig
 
@@ -27,20 +29,23 @@ object Main extends App {
   if (config.getList("akka.cluster.seed-nodes").isEmpty)
     Cluster(system).join(Cluster(system).selfAddress)
 
-  val pattern = config.getString("schedule-pattern")
-
-  val s = new Scheduler()
-  s.schedule(pattern, new Runnable {
-    override def run(): Unit = {
-      println("hi")
-    }
-  })
-  s.start()
 
   HomeProcessor.register()
 
   val botAccess = HomeExtension(system)
   botAccess.hp
+
+  val consumer = KafkaConsumer()(system)
+
+  consumer.subscribe(Set("mehdi"))
+
+  val kafkaExt = KafkaExtension(system).broker
+
+
+  1 to 1000 foreach { _ =>
+    Thread.sleep(500)
+    kafkaExt.publish("mehdi", "key", "newMessage")
+  }
 
 
 }

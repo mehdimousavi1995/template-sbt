@@ -3,16 +3,15 @@ package util
 import java.time.LocalDateTime
 
 import org.apache.commons.validator.routines.UrlValidator
-import org.bouncycastle.util.encoders.Base64
 
 import scala.language.postfixOps
-import scala.util.Random
 
 object UtilFunctions {
   def generateToken(): String = {
-    val tokenByteArray = new Array[Byte](32)
-    Random.nextBytes(tokenByteArray)
-    Base64.toBase64String(tokenByteArray)
+//    val tokenByteArray = new Array[Byte](32)
+//    Random.nextBytes(tokenByteArray)
+//    Base64.toBase64String(tokenByteArray)
+    "new token"
   }
 
   def dateTimeKey(time: LocalDateTime): String = {

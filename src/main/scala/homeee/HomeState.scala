@@ -2,7 +2,6 @@ package homeee
 
 import akka.persistence.SnapshotMetadata
 import cqrs.{Event, ProcessorState}
-import messages.homeee.homessages.AllDevices.Value.HeatingCooler
 import messages.homeee.homessages.HomeEvents.{DeviceAdded, DeviceRemoved, HomeCreated}
 import messages.homeee.homessages.{AllDevices, HomeSnapShot, Owner}
 

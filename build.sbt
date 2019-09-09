@@ -7,6 +7,7 @@ enablePlugins(JavaAppPackaging)
 enablePlugins(DockerPlugin)
 enablePlugins(AshScriptPlugin)
 
+
 libraryDependencies ++= Seq(
   "net.debasishg" %% "redisclient" % "3.4",
   "com.typesafe.akka" %% "akka-http" % "10.1.5",
@@ -31,7 +32,9 @@ libraryDependencies ++= Seq(
   "com.outworkers" %% "phantom-jdk8" % "2.24.2",
   "com.outworkers" %% "phantom-dsl" % "2.24.2",
   "com.outworkers" %% "phantom-connectors" % "2.24.2",
-  "ai.bale.server" %% "commons-kafka" % "1.0.100",
+//  "ai.bale.server" %% "commons-kafka" % "1.0.100",
+  "com.typesafe.akka" %% "akka-stream-kafka" % "0.20" exclude("javax.security", "security-api"),
+  "net.cakesolutions" %% "scala-kafka-client" % "1.1.0" exclude("javax.security", "security-api"),
   "im.actor" %% "akka-scalapb-serialization" % "0.1.19",
   "com.thesamet.scalapb" %% "scalapb-runtime" % scalapb.compiler.Version.scalapbVersion % "protobuf",
   "io.grpc" % "grpc-netty" % scalapb.compiler.Version.grpcJavaVersion,
@@ -41,8 +44,8 @@ libraryDependencies ++= Seq(
   "org.scalacheck" %% "scalacheck" % "1.13.4" % "test",
   "org.scalatest" %% "scalatest" % "3.0.3" % "test",
   "com.typesafe.akka" %% "akka-http-testkit" % "10.1.5",
-  "org.bouncycastle" % "bcprov-jdk15on" % "1.56",
-  "it.sauronsoftware.cron4j" % "cron4j" % "2.2.5",
+//  "org.bouncycastle" % "bcprov-jdk15on" % "1.56",
+//  "it.sauronsoftware.cron4j" % "cron4j" % "2.2.5",
   "commons-validator" % "commons-validator" % "1.6"
 
 

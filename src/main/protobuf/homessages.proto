@@ -64,7 +64,6 @@ message HomeSnapShot {
 }
 
 message HomeCommands {
-
     message CreateHome {
         required string home_id = 1;
         option (scalapb.message).extends = "homeee.HomeCommand";
@@ -92,6 +91,7 @@ message HomeCommands {
 }
 
 message HomeQuries {
+
     message GetHome {
         required string home_id = 1;
         option (scalapb.message).extends = "homeee.HomeQuery";

@@ -1,6 +1,6 @@
 package http
 
-import java.time.LocalDateTime
+import java.time.{Instant, LocalDateTime}
 
 import http.entities._
 import persist.cassandra.home.Home
