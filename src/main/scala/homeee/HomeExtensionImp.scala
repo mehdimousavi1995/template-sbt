@@ -5,8 +5,10 @@ import java.util.concurrent.TimeUnit
 import akka.actor.{ActorRef, ActorSystem}
 import akka.pattern.ask
 import akka.util.Timeout
-import messages.homeee.homessages.HomeCommands.CreateHome
-import messages.homeee.homessages.Owner
+import http.entities.GetDeviceStatusResponse
+import messages.homeee.homessages.HomeCommands.{AddDevice, CreateHome, DeviceStatus, RemoveDevice}
+import messages.homeee.homessages.HomeQuries.{GetDevice, GetDeviceResponse, GetHome, GetHomeResponse}
+import messages.homeee.homessages.{AllDevices, HomeQuries, Owner, ResponseVoid}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -22,4 +24,21 @@ final class HomeExtensionImp(system: ActorSystem) extends HomeExtension {
   override def createHome(homeId: String, owner: Owner, address: String, houseArea: Int, createdAt: Long): Future[Any] =
     (hp ? CreateHome(homeId, owner, address, houseArea)).mapTo[Any]
 
+  override def deviceStatus(homeId: String, deviceId: String, status: String): Future[Any] =
+    (hp ? DeviceStatus(homeId, deviceId, status)).mapTo[Any]
+
+  override def addDevice(homeId: String, device: AllDevices): Future[Any] =
+    (hp ? AddDevice(homeId, device)).mapTo[Any]
+
+  override def removeDevice(homeId: String, deviceId: String): Future[Any] =
+    (hp ? RemoveDevice(homeId, deviceId)).mapTo[Any]
+
+  override def getHome(homeId: String): Future[GetHomeResponse] =
+    (hp ? GetHome(homeId)).mapTo[GetHomeResponse]
+
+  override def getDevice(homeId: String, deviceId: String): Future[GetDeviceResponse] =
+    (hp ? GetDevice(homeId, deviceId)).mapTo[GetDeviceResponse]
+
+  override def getDeviceStatus(homeId: String, deviceId: String, status: String): Future[GetDeviceStatusResponse] =
+    (hp ? DeviceStatus(homeId, deviceId, status)).mapTo[GetDeviceStatusResponse]
 }

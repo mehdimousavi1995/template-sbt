@@ -2,8 +2,8 @@ package homeee
 
 import java.time.Instant
 
-import messages.homeee.homessages.HomeCommands.{AddDevice, CreateHome, RemoveDevice}
-import messages.homeee.homessages.HomeEvents.{DeviceAdded, DeviceRemoved, HomeCreated}
+import messages.homeee.homessages.HomeCommands.{AddDevice, CreateHome, DeviceStatus, RemoveDevice}
+import messages.homeee.homessages.HomeEvents.{DeviceAdded, DeviceRemoved, DeviceStatusChanged, HomeCreated}
 import messages.homeee.homessages.ResponseVoid
 
 
@@ -36,6 +36,16 @@ private trait HomeCommandHandler {
     persist(DeviceRemoved(rd.deviceId, Instant.now())) { evt =>
       commit(evt)
       log.info("Device removed from home: {}, device: {}", homeUserId, rd.deviceId)
+      replyTo ! ResponseVoid
+    }
+  }
+
+
+  def deviceStatus(ds: DeviceStatus): Unit = {
+    val replyTo = sender()
+    persist(DeviceStatusChanged(ds.deviceId, Instant.now(), ds.status)) { evt =>
+      commit(evt)
+      log.info("Device Status changed from home: {}, device: {}", homeUserId, ds.deviceId)
       replyTo ! ResponseVoid
     }
   }

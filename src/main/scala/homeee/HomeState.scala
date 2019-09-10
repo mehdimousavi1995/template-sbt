@@ -2,7 +2,7 @@ package homeee
 
 import akka.persistence.SnapshotMetadata
 import cqrs.{Event, ProcessorState}
-import messages.homeee.homessages.HomeEvents.{DeviceAdded, DeviceRemoved, HomeCreated}
+import messages.homeee.homessages.HomeEvents.{DeviceAdded, DeviceRemoved, DeviceStatusChanged, HomeCreated}
 import messages.homeee.homessages.{AllDevices, HomeSnapShot, Owner}
 
 private[homeee] object HomeState {
@@ -16,6 +16,7 @@ private[homeee] object HomeState {
   )
 }
 
+
 private[homeee] final case class HomeState(
                                             homeId: String,
                                             owner: Owner,
@@ -23,24 +24,21 @@ private[homeee] final case class HomeState(
                                             address: String,
                                             houseArea: Int
 
-                                          ) extends ProcessorState[HomeState] {
+                                          ) extends ProcessorState[HomeState] with DeviceHelper {
+
+
 
   override def updated(e: Event): HomeState = {
     e match {
       case e: HomeCreated ⇒
         this.copy(e.homeId, e.owner, Seq.empty[AllDevices], e.address, e.houseArea)
-
       case e: DeviceAdded =>
         this.copy(devices = this.devices :+ e.device)
-
       case e: DeviceRemoved =>
-        this.copy(devices = this.devices.filterNot {
-          case AllDevices(d) if d.isDefined && d.isHeatingCooler =>
-            d.heatingCooler.get.deviceId == e.deviceId
-          case AllDevices(d) if d.isDefined && d.isLampDevice =>
-            d.lampDevice.get.deviceId == e.deviceId
-          case _ => false
-        })
+        this.copy(devices = this.devices.removeDevice(e.deviceId))
+
+      case e: DeviceStatusChanged =>
+        this.copy(devices = this.devices.updateDevice(e.deviceId, e.status, e.optTemp))
 
     }
   }

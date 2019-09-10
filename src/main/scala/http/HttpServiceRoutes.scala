@@ -9,7 +9,7 @@ import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.server.directives.Credentials
 import akka.stream.ActorMaterializer
 import homeee.HomeExtension
-import http.entities.{HomeDTO, LoginRequest, UserRequest}
+import http.entities.{DeviceStatusRequest, HomeDTO, LoginRequest, UserRequest}
 import persist.cassandra.home.HomeService
 import persist.cassandra.{AppDatabase, AppDatabaseProvider, CassandraConnection}
 import persist.postgres.PostgresDBExtension
@@ -72,11 +72,12 @@ class HttpServiceRoutes()(implicit val system: ActorSystem) extends HttpHandler
           }
         }
       }
-    } ~ path("test") {
-      // TODO remeber to change this api
-      get {
-        authenticateOAuth2Async(realm = "api", oAuthAuthenticator) { validToken =>
-          complete(s"It worked! user = $validToken")
+    } ~ path("status") {
+      post {
+        entity(as[DeviceStatusRequest]) {request =>
+          onComplete(publishStatusToKafka(request)) {
+            generateHttpResponse("status")
+          }
         }
       }
     }

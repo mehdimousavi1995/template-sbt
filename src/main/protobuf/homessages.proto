@@ -43,14 +43,15 @@ message LampDevice {
 enum HeatingCoolerState {
     COOLER = 0;
     HEATING = 1;
+    OFFLINE = 2;
 }
 
 
 message HeatingCooler {
     required string device_id = 1;
     required string device_name = 2;
-    required OnOrOffStatus on_or_off_status = 3;
-    required HeatingCoolerState heating_cooler_state = 4;
+    required HeatingCoolerState heating_cooler_state = 3;
+    required int32 temperature = 4;
 
     option (scalapb.message).extends = "homeee.Device";
 }
@@ -87,6 +88,13 @@ message HomeCommands {
         required string device_id = 2;
     }
 
+    message DeviceStatus {
+        required string home_id = 1;
+        option (scalapb.message).extends = "homeee.HomeCommand";
+        required string device_id = 2;
+        required string status = 3;
+    }
+
 
 }
 
@@ -96,18 +104,33 @@ message HomeQuries {
         required string home_id = 1;
         option (scalapb.message).extends = "homeee.HomeQuery";
     }
-    message GetHomeResponse {
 
+    message GetHomeResponse {
+        required Owner owner = 2;
+        repeated AllDevices devices = 3;
+        required string address = 4;
+        required int32 house_area = 5;
     }
 
-    message GetDevice {
+     message GetDevice {
         required string home_id = 1;
         option (scalapb.message).extends = "homeee.HomeQuery";
         required string device_id = 2;
     }
 
     message GetDeviceResponse {
-        required AllDevices device = 1;
+        optional AllDevices device = 1;
+    }
+
+    message GetDeviceSatatus {
+        required string home_id = 1;
+        option (scalapb.message).extends = "homeee.HomeQuery";
+        required string device_id = 2;
+    }
+
+    message GetDeviceStatusResponse {
+        required string status = 1;
+        optional int32 opt_temp = 2;
     }
 
 }
@@ -132,6 +155,15 @@ message HomeEvents {
         option (scalapb.message).extends = "homeee.HomeEvent";
         required string device_id = 1;
         required int64 ts = 2 [(scalapb.field).type = "java.time.Instant"];
+    }
+
+
+    message DeviceStatusChanged {
+        option (scalapb.message).extends = "homeee.HomeEvent";
+        required string device_id = 1;
+        required int64 ts = 2 [(scalapb.field).type = "java.time.Instant"];
+        required string status = 3;
+        optional int32 opt_temp = 4;
     }
 }
 

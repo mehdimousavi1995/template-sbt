@@ -2,22 +2,25 @@ package kafka
 
 import akka.actor.ActorSystem
 import akka.kafka.ConsumerMessage.CommittableMessage
+import akka.kafka.Subscriptions
 import akka.kafka.scaladsl.Consumer
-import akka.kafka.{ConsumerSettings, Subscriptions}
 import akka.stream.ActorMaterializer
 import com.typesafe.config.Config
+import homeee.HomeExtension
+import http.JsonSerializer
+import http.entities.DeviceStatusRequest
 import org.apache.kafka.clients.consumer.ConsumerConfig
-import org.apache.kafka.common.serialization.StringDeserializer
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
 
-case class KafkaConsumer()(implicit system: ActorSystem) {
+case class KafkaDeviceStatusConsumer()(implicit system: ActorSystem) extends JsonSerializer {
 
   val parallelLimit = 2
   val kafkaExt: KafkaManager = KafkaExtension(system).broker
   implicit val ec: ExecutionContextExecutor = system.dispatcher
   implicit val mat: ActorMaterializer = ActorMaterializer()
+  val homeExt = HomeExtension(system)
 
   val flow: CommittableMessage[String, String] ⇒ Future[(String, Option[Int])] = { msg: CommittableMessage[String, String] ⇒
     msg.record.value() match {
@@ -28,6 +31,7 @@ case class KafkaConsumer()(implicit system: ActorSystem) {
     }
   }
   val config: Config = system.settings.config.getConfig("services.kafka")
+  import spray.json._
 
   def subscribe(topics: Set[String], groupId: String = "group-id"): Unit = {
 
@@ -38,12 +42,13 @@ case class KafkaConsumer()(implicit system: ActorSystem) {
         .withProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
       ,
       Subscriptions.topics(topics)
-    ).mapAsync(parallelLimit)(flow).runForeach(res ⇒ {
-      println("===========================================")
-      println(res)
-      println("===========================================")
-    }
-    )(mat)
+    ).mapAsync(parallelLimit)(flow).runForeach {
+      case (publishedMessage: String, groupId: Option[Int]) ⇒
+        val statusRequest: DeviceStatusRequest = publishedMessage.parseJson.convertTo[DeviceStatusRequest]
+
+
+
+    }(mat)
   }
 
 }

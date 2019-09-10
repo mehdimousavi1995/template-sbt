@@ -5,7 +5,7 @@ import akka.cluster.Cluster
 import akka.stream.ActorMaterializer
 import homeee.{HomeExtension, HomeProcessor}
 import http.HttpServiceRoutes
-import kafka.{KafkaConsumer, KafkaExtension}
+import kafka.{KafkaDeviceStatusConsumer, KafkaExtension}
 import persist.postgres.PostgresDBExtension
 //import kafka.{KafkaConsumer, KafkaExtension}
 import persist.redis.RedisExtension
@@ -35,7 +35,7 @@ object Main extends App {
   val botAccess = HomeExtension(system)
   botAccess.hp
 
-  val consumer = KafkaConsumer()(system)
+  val consumer = KafkaDeviceStatusConsumer()(system)
 
   consumer.subscribe(Set("mehdi"))
 
