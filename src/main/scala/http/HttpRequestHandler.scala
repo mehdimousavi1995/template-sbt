@@ -47,8 +47,8 @@ trait HttpRequestHandler extends AuthenticationHelper
   def createHome(request: CreateHomeDTO): Future[HttpError Either CreateHomeResponseDTO] = {
     val home = Home(address = request.address, houseArea = request.houseArea, ownerId = request.ownerId)
     (for {
-      _ <- fromFuture(homeService.store(partitionKey, home))
       owner <- fromFutureOption(OwnerNotFound)(ownerService.findById(partitionKey, request.ownerId))
+      _ <- fromFuture(homeService.store(partitionKey, home))
       _ <- fromFuture(homeExt.createHome(home.homeId.toString, owner, home.address, home.houseArea, home.createdAt))
     } yield CreateHomeResponseDTO(home.homeId, home.ownerId, home.address, home.houseArea)).value
   }
