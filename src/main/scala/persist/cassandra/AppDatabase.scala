@@ -14,3 +14,9 @@ class AppDatabase(override val connector: CassandraConnection)
 }
 
 trait AppDatabaseProvider extends DatabaseProvider[AppDatabase]
+
+object CassandraDatabase extends AppDatabase(CassandraConnection.connection)
+
+trait CassandraDatabaseProvider extends AppDatabaseProvider {
+  override def database: AppDatabase = CassandraDatabase
+}

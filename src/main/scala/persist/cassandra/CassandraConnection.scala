@@ -10,7 +10,7 @@ object CassandraConnection {
   private val config: Config = ConfigFactory.parseString("""cassandra {
                                                            |  host: "127.0.0.1"
                                                            |  port: 9042
-                                                           |  keyspace: "scala_cassandra_example"
+                                                           |  keyspace: "smart_house",
                                                            |}
                                                          """.stripMargin)
 

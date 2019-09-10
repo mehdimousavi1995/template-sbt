@@ -26,3 +26,8 @@ case object WrongUsernameOrPassword extends HttpError {
   override val code: Int = 401
   override val error: String = "WRONG_USERNAME_OR_PASSWORD"
 }
+
+case object OwnerNotFound extends HttpError {
+  override val code: Int = 404
+  override val error: String = "OWNER_NOT_FOUND"
+}

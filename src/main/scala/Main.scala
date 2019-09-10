@@ -5,13 +5,17 @@ import akka.cluster.Cluster
 import akka.stream.ActorMaterializer
 import homeee.{HomeExtension, HomeProcessor}
 import http.HttpServiceRoutes
-import kafka.{KafkaDeviceStatusConsumer, KafkaExtension}
+import persist.cassandra.CassandraDatabaseProvider
+import persist.cassandra.home.HomeService
+import persist.cassandra.owner.OwnerService
 import persist.postgres.PostgresDBExtension
-//import kafka.{KafkaConsumer, KafkaExtension}
+import com.outworkers.phantom.dsl._
+import persist.cassandra.device.DeviceService
 import persist.redis.RedisExtension
 import sdk.CustomConfig
 
 import scala.concurrent.ExecutionContextExecutor
+import scala.language.reflectiveCalls
 
 object Main extends App {
 
@@ -31,21 +35,14 @@ object Main extends App {
 
 
   HomeProcessor.register()
+  val homeService = new HomeService with CassandraDatabaseProvider
+  val ownerService = new OwnerService with CassandraDatabaseProvider
+  val deviceService = new DeviceService with CassandraDatabaseProvider
+
+  homeService.database.create()(ec)
+  ownerService.database.create()(ec)
 
   val botAccess = HomeExtension(system)
   botAccess.hp
-
-  val consumer = KafkaDeviceStatusConsumer()(system)
-
-  consumer.subscribe(Set("mehdi"))
-
-  val kafkaExt = KafkaExtension(system).broker
-
-
-  1 to 1000 foreach { _ =>
-    Thread.sleep(500)
-    kafkaExt.publish("mehdi", "key", "newMessage")
-  }
-
 
 }

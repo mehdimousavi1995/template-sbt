@@ -9,9 +9,10 @@ import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.server.directives.Credentials
 import akka.stream.ActorMaterializer
 import homeee.HomeExtension
-import http.entities.{DeviceStatusRequest, HomeDTO, LoginRequest, UserRequest}
+import http.entities._
 import persist.cassandra.home.HomeService
-import persist.cassandra.{AppDatabase, AppDatabaseProvider, CassandraConnection}
+import persist.cassandra.owner.OwnerService
+import persist.cassandra.{AppDatabase, AppDatabaseProvider, CassandraConnection, CassandraDatabaseProvider}
 import persist.postgres.PostgresDBExtension
 import persist.redis.RedisExtension
 import util.AuthenticationHelper
@@ -30,14 +31,11 @@ class HttpServiceRoutes()(implicit val system: ActorSystem) extends HttpHandler
   val host: String = system.settings.config.getString("http.listen-address.host")
   val port: Int = system.settings.config.getInt("http.listen-address.port")
 
-  object CassandraDatabase extends AppDatabase(CassandraConnection.connection)
 
-  trait CassandraDatabaseProvider extends AppDatabaseProvider {
-    override def database: AppDatabase = CassandraDatabase
-  }
 
   val partitionKey = "partition-1"
   val homeService = new HomeService with CassandraDatabaseProvider
+  val ownerService = new OwnerService with CassandraDatabaseProvider
 
   val homeExt = HomeExtension(system)
 
@@ -50,9 +48,17 @@ class HttpServiceRoutes()(implicit val system: ActorSystem) extends HttpHandler
 
     path("houses") {
       post {
-        entity(as[HomeDTO]) { request =>
+        entity(as[CreateHomeDTO]) { request =>
           onComplete(createHome(request)) {
             generateHttpResponse("create home")
+          }
+        }
+      }
+    } ~ path("owners") {
+      post {
+        entity(as[CreateOwnerDTO]) { request =>
+          onComplete(createOwner(request)) {
+            generateHttpResponse("create owner")
           }
         }
       }
