@@ -10,6 +10,7 @@ import persist.cassandra.home.HomeService
 import persist.cassandra.owner.OwnerService
 import persist.postgres.PostgresDBExtension
 import com.outworkers.phantom.dsl._
+import kafka.KafkaDeviceStatusConsumer
 import persist.cassandra.device.DeviceService
 import persist.redis.RedisExtension
 import sdk.CustomConfig
@@ -41,8 +42,14 @@ object Main extends App {
 
   homeService.database.create()(ec)
   ownerService.database.create()(ec)
+  deviceService.database.create()(ec)
 
   val botAccess = HomeExtension(system)
   botAccess.hp
+
+  val deviceStatusTopic = "device-status-topic"
+  val kafkaKey = "kafkaKey"
+  val deviceConsumer = KafkaDeviceStatusConsumer()
+  deviceConsumer.subscribe(Set(deviceStatusTopic))
 
 }

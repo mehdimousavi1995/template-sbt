@@ -122,7 +122,7 @@ message HomeQuries {
         optional AllDevices device = 1;
     }
 
-    message GetDeviceSatatus {
+    message GetDeviceStatus {
         required string home_id = 1;
         option (scalapb.message).extends = "homeee.HomeQuery";
         required string device_id = 2;

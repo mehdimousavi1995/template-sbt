@@ -34,7 +34,6 @@ case class KafkaDeviceStatusConsumer()(implicit system: ActorSystem) extends Jso
   import spray.json._
 
   def subscribe(topics: Set[String], groupId: String = "group-id"): Unit = {
-
     Consumer.committableSource(
       kafkaExt.consumerSettings(groupId)
         .withBootstrapServers(config.getString("consumer.bootstrap.servers"))
@@ -45,7 +44,7 @@ case class KafkaDeviceStatusConsumer()(implicit system: ActorSystem) extends Jso
     ).mapAsync(parallelLimit)(flow).runForeach {
       case (publishedMessage: String, _: Option[Int]) ⇒
         val statusRequest: DeviceStatusRequest = publishedMessage.parseJson.convertTo[DeviceStatusRequest]
-        homeExt.deviceStatus(statusRequest.homeId, statusRequest.deviceId, statusRequest.status).map { _ =>
+        homeExt.deviceStatus(statusRequest.homeId.toString, statusRequest.deviceId.toString, statusRequest.status).map { _ =>
           system.log.info("published device status to kafka, homeId: {}, deviceId: {}, status: {}",
             statusRequest.homeId, statusRequest.deviceId, statusRequest.status)
         }

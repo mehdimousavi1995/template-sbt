@@ -10,7 +10,7 @@ import cqrs.{IncrementalSnapshots, Processor, TaggedEvent}
 import im.actor.serialization.ActorSerializer
 import messages.homeee.homessages.AllDevices.Value.LampDevice
 import messages.homeee.homessages.HomeCommands.{AddDevice, CreateHome, DeviceStatus, RemoveDevice}
-import messages.homeee.homessages.HomeQuries.{GetDevice, GetDeviceSatatus, GetHome}
+import messages.homeee.homessages.HomeQuries.{GetDevice, GetDeviceStatus, GetHome}
 import messages.homeee.homessages._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -50,7 +50,7 @@ object HomeProcessor {
       85851 -> classOf[HomeQuries.GetHomeResponse],
       85852 -> classOf[HomeQuries.GetDevice],
       85853 -> classOf[HomeQuries.GetDeviceResponse],
-      85854 -> classOf[HomeQuries.GetDeviceSatatus],
+      85854 -> classOf[HomeQuries.GetDeviceStatus],
       85855 -> classOf[HomeQuries.GetDeviceStatusResponse],
 
 
@@ -106,7 +106,7 @@ private final class HomeProcessor
   override protected def handleQuery: PartialFunction[Any, Future[Any]] = {
     case q: GetHome => getHome(q)
     case q: GetDevice => getDevice(q)
-    case q: GetDeviceSatatus => getDeviceStatus(q)
+    case q: GetDeviceStatus => getDeviceStatus(q)
   }
 
 }

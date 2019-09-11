@@ -47,9 +47,9 @@ libraryDependencies ++= Seq(
 //  "org.bouncycastle" % "bcprov-jdk15on" % "1.56",
 //  "it.sauronsoftware.cron4j" % "cron4j" % "2.2.5",
   "commons-validator" % "commons-validator" % "1.6"
-
-
 )
+
+bashScriptExtraDefines += """addJava "-Dlogback.configurationFile=${app_home}/../conf/logback.xml""""
 
 
 PB.targets in Compile := Seq(

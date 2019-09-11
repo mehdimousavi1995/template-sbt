@@ -25,7 +25,7 @@ trait HomeExtension extends Extension {
 
   def getDevice(homeId: String, deviceId: String): Future[GetDeviceResponse]
 
-  def getDeviceStatus(homeId: String, deviceId: String, status: String): Future[GetDeviceStatusResponse]
+  def getDeviceStatus(homeId: String, deviceId: String): Future[GetDeviceStatusResponse]
 
 }
 

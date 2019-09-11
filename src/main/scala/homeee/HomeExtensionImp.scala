@@ -7,7 +7,7 @@ import akka.pattern.ask
 import akka.util.Timeout
 import http.entities.GetDeviceStatusResponse
 import messages.homeee.homessages.HomeCommands.{AddDevice, CreateHome, DeviceStatus, RemoveDevice}
-import messages.homeee.homessages.HomeQuries.{GetDevice, GetDeviceResponse, GetHome, GetHomeResponse}
+import messages.homeee.homessages.HomeQuries.{GetDevice, GetDeviceResponse, GetDeviceStatus, GetHome, GetHomeResponse}
 import messages.homeee.homessages.{AllDevices, HomeQuries, Owner, ResponseVoid}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -39,6 +39,6 @@ final class HomeExtensionImp(system: ActorSystem) extends HomeExtension {
   override def getDevice(homeId: String, deviceId: String): Future[GetDeviceResponse] =
     (hp ? GetDevice(homeId, deviceId)).mapTo[GetDeviceResponse]
 
-  override def getDeviceStatus(homeId: String, deviceId: String, status: String): Future[GetDeviceStatusResponse] =
-    (hp ? DeviceStatus(homeId, deviceId, status)).mapTo[GetDeviceStatusResponse]
+  override def getDeviceStatus(homeId: String, deviceId: String): Future[GetDeviceStatusResponse] =
+    (hp ? GetDeviceStatus(homeId, deviceId)).mapTo[GetDeviceStatusResponse]
 }

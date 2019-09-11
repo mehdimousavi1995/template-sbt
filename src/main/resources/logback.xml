@@ -19,6 +19,7 @@
     <logger name="o.apache.kafka.clients.NetworkClient" level="WARN"/>
     <logger name="o.a.kafka.common.network.Selector" level="WARN"/>
     <logger name="o.a.kafka.common.network" level="WARN"/>
+    <logger name="o.a.k.clients" level="WARN"/>
 
     <appender name="FILE-AUDI" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>sequence-service.log</file>

@@ -1,15 +1,18 @@
 package http
 
-import java.time.{Instant, LocalDateTime}
+import java.time.LocalDateTime
+import java.util.UUID
 
 import http.entities._
 import kafka.{KafkaExtension, KafkaManager}
+import messages.homeee.homessages._
+import persist.cassandra.device.Device
 import persist.cassandra.home.Home
 import persist.cassandra.owner.Owner
 import persist.postgres.model.User
 import persist.postgres.repos.UserRepo
-import util.{AuthenticationHelper, FutureResult, ImplicitConversions, TimeUtils}
 import spray.json._
+import util.{AuthenticationHelper, FutureResult, ImplicitConversions, TimeUtils}
 
 import scala.concurrent.Future
 
@@ -61,15 +64,49 @@ trait HttpRequestHandler extends AuthenticationHelper
     )
     (
       for {
-        _ <- fromFuture(ownerService.store(partitionKey,owner))
+        _ <- fromFuture(ownerService.store(partitionKey, owner))
       } yield CreateOwnerResponseDTO(owner.ownerId, owner.firstName, owner.lastName, owner.telegramUserId)).value
   }
 
+  implicit class FutureOptionList[T](l: Future[List[Option[T]]]) {
+    def filterOption(): Future[List[T]] = {
+      l.map(_.filter(_.isDefined).map(_.get))
+    }
+  }
+
+  def createDeviceWith(request: Device): AllDevices = {
+    request.deviceType match {
+      case "LAMP" =>
+        val lamp = LampDevice(request.deviceId.toString, request.deviceName, OnOrOffStatus.OFF)
+        AllDevices().withLampDevice(lamp)
+      case "HEATER_COOLER" =>
+        val heatingCooler = HeatingCooler(request.deviceId.toString, request.deviceName, HeatingCoolerState.OFFLINE, 0)
+        AllDevices().withHeatingCooler(heatingCooler)
+    }
+  }
+
+  def createDevices(request: DeviceDTO): Future[HttpError Either DeviceResponseDTO] = {
+    (for {
+      _ <- fromFutureOption(HomeNotFound)(homeService.findById(partitionKey, request.homeId))
+      device = Device(deviceName = request.deviceName, deviceType = request.deviceType, homeId = request.homeId)
+      _ <- fromFuture(deviceService.store(partitionKey, device))
+      allDevice = createDeviceWith(device)
+      _ <- fromFuture(homeExt.addDevice(device.homeId.toString, allDevice))
+    } yield DeviceResponseDTO(device.deviceId, device.homeId, device.deviceName, device.deviceType)).value
+  }
 
   def publishStatusToKafka(request: DeviceStatusRequest): Future[HttpError Either DeviceStatusResponse] = {
     (for {
+      _ <- fromFutureOption(DeviceNotFound)(deviceService.findById(partitionKey, request.deviceId))
+      _ <- fromFutureOption(HomeNotFound)(homeService.findById(partitionKey, request.homeId))
       _ <- fromFuture(kafkaExt.publish(deviceStatusTopic, kafkaKey, request.toJson.toString))
     } yield DeviceStatusResponse()).value
+  }
+
+  def getStatus(homeId: String, deviceId: String): Future[HttpError Either GetDeviceStatusResponse] = {
+    (for {
+      device <- fromFuture(homeExt.getDeviceStatus(homeId, deviceId))
+    } yield GetDeviceStatusResponse(device.status, device.optTemp)).value
   }
 
 }

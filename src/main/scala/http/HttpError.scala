@@ -31,3 +31,12 @@ case object OwnerNotFound extends HttpError {
   override val code: Int = 404
   override val error: String = "OWNER_NOT_FOUND"
 }
+
+case object HomeNotFound extends HttpError {
+  override val code: Int = 404
+  override val error: String = "HOME_NOT_FOUND"
+}
+case object DeviceNotFound extends HttpError {
+  override val code: Int = 404
+  override val error: String = "DEVICE_NOT_FOUND"
+}

@@ -1,21 +1,24 @@
 package http.entities
 
+import java.util.UUID
 
-case class DeviceStatusRequest(deviceId: String,
-                              homeId: String,
-                              status: String,
-                              optTemp: Option[Int] = None)
+
+case class DeviceStatusRequest(
+                                deviceId: UUID,
+                                homeId: UUID,
+                                status: String,
+                                optTemp: Option[Int] = None) {
+  require(
+    (optTemp.isDefined && (status == "OFF" || status == "HEATER" || status == "COOLER")) ||
+      (optTemp.isEmpty && (status == "OFF" || status == "ON")),
+    "INVALID_INPUT_BY_CLIENT"
+  )
+}
 
 case class DeviceStatusResponse(message: String = "SUCCESS")
 
 
-
-case class GetDeviceStatusRequest(
-                                 deviceId: String,
-                                 homeId: String
-                                 )
-
 case class GetDeviceStatusResponse(
-                                  status: String,
-                                  optTemp: Option[Int] = None
+                                    status: String,
+                                    optTemp: Option[Int] = None
                                   )

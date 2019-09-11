@@ -10,6 +10,7 @@ import akka.http.scaladsl.server.directives.Credentials
 import akka.stream.ActorMaterializer
 import homeee.HomeExtension
 import http.entities._
+import persist.cassandra.device.DeviceService
 import persist.cassandra.home.HomeService
 import persist.cassandra.owner.OwnerService
 import persist.cassandra.{AppDatabase, AppDatabaseProvider, CassandraConnection, CassandraDatabaseProvider}
@@ -32,10 +33,10 @@ class HttpServiceRoutes()(implicit val system: ActorSystem) extends HttpHandler
   val port: Int = system.settings.config.getInt("http.listen-address.port")
 
 
-
   val partitionKey = "partition-1"
   val homeService = new HomeService with CassandraDatabaseProvider
   val ownerService = new OwnerService with CassandraDatabaseProvider
+  val deviceService = new DeviceService with CassandraDatabaseProvider
 
   val homeExt = HomeExtension(system)
 
@@ -62,6 +63,15 @@ class HttpServiceRoutes()(implicit val system: ActorSystem) extends HttpHandler
           }
         }
       }
+    } ~ path("devices") {
+      post {
+        entity(as[DeviceDTO]) { request =>
+          onComplete(createDevices(request)) {
+            generateHttpResponse("crated devices")
+          }
+        }
+      }
+
     } ~ path("users") {
       post {
         entity(as[UserRequest]) { request =>
@@ -80,10 +90,16 @@ class HttpServiceRoutes()(implicit val system: ActorSystem) extends HttpHandler
       }
     } ~ path("status") {
       post {
-        entity(as[DeviceStatusRequest]) {request =>
+        entity(as[DeviceStatusRequest]) { request =>
           onComplete(publishStatusToKafka(request)) {
             generateHttpResponse("status")
           }
+        }
+      }
+    } ~ path("homes" / Segment / "devices" / Segment) { (homeId, deviceId) =>
+      get {
+        onComplete(getStatus(homeId, deviceId)) {
+          generateHttpResponse("get status")
         }
       }
     }
