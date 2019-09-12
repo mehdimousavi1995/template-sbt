@@ -122,6 +122,16 @@ message HomeQuries {
         optional AllDevices device = 1;
     }
 
+
+    message GetAllDevices {
+        required string home_id = 1;
+        option (scalapb.message).extends = "homeee.HomeQuery";
+    }
+
+    message GetAllDevicesResponse {
+        repeated AllDevices devices = 1;
+    }
+
     message GetDeviceStatus {
         required string home_id = 1;
         option (scalapb.message).extends = "homeee.HomeQuery";

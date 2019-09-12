@@ -4,7 +4,7 @@ import java.util.UUID
 import main.Constant._
 
 
-case class DeviceStatusRequest(
+case class DeviceStatusDTO(
                                 deviceId: UUID,
                                 homeId: UUID,
                                 status: String,

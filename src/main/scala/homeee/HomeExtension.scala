@@ -1,8 +1,7 @@
 package homeee
 
 import akka.actor.{ActorRef, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider}
-import http.entities.GetDeviceStatusResponse
-import messages.homeee.homessages.HomeQuries.{GetDeviceResponse, GetHomeResponse}
+import messages.homeee.homessages.HomeQuries.{GetAllDevicesResponse, GetDeviceResponse, GetDeviceStatusResponse, GetHomeResponse}
 import messages.homeee.homessages.{AllDevices, Owner}
 
 import scala.concurrent.Future
@@ -26,6 +25,8 @@ trait HomeExtension extends Extension {
   def getDevice(homeId: String, deviceId: String): Future[GetDeviceResponse]
 
   def getDeviceStatus(homeId: String, deviceId: String): Future[GetDeviceStatusResponse]
+
+  def getAllDevices(homeId: String): Future[GetAllDevicesResponse]
 
 }
 

@@ -26,6 +26,7 @@ trait DeviceHelper {
     }
 
     import main.Constant._
+
     def updateDevice(deviceId: String, status: String, optTemp: Option[Int]): Seq[AllDevices] = {
       devices.map {
         case AllDevices(d) if d.isDefined && d.isHeaterCooler && d.heaterCooler.get.deviceId == deviceId =>
@@ -43,7 +44,7 @@ trait DeviceHelper {
 
           AllDevices().withHeaterCooler(updatedDevice)
 
-        case AllDevices(d) if d.isDefined && d.isLampDevice && d.lampDevice.get.deviceId == deviceId=>
+        case AllDevices(d) if d.isDefined && d.isLampDevice && d.lampDevice.get.deviceId == deviceId =>
           val device = d.lampDevice.get
           val updatedDevice = status match {
             case OFF if device.onOrOffStatus.isOn =>
@@ -58,4 +59,5 @@ trait DeviceHelper {
     }
 
   }
+
 }

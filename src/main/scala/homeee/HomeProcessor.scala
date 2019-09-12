@@ -10,7 +10,7 @@ import cqrs.{IncrementalSnapshots, Processor, TaggedEvent}
 import im.actor.serialization.ActorSerializer
 import messages.homeee.homessages.AllDevices.Value.LampDevice
 import messages.homeee.homessages.HomeCommands.{AddDevice, CreateHome, DeviceStatus, RemoveDevice}
-import messages.homeee.homessages.HomeQuries.{GetDevice, GetDeviceStatus, GetHome}
+import messages.homeee.homessages.HomeQuries.{GetAllDevices, GetDevice, GetDeviceStatus, GetHome}
 import messages.homeee.homessages._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -107,6 +107,7 @@ private final class HomeProcessor
     case q: GetHome => getHome(q)
     case q: GetDevice => getDevice(q)
     case q: GetDeviceStatus => getDeviceStatus(q)
+    case q: GetAllDevices => getAllDevices(q)
   }
 
 }

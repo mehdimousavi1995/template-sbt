@@ -17,3 +17,13 @@ final case class DeviceResponseDTO(
                                   deviceName: String,
                                   deviceType: String
                                   )
+
+
+final case class DeviceInfoDTO(
+                              deviceId: String,
+                              deviceName: String,
+                              deviceType: String,
+                              status: String,
+                              optTemp: Option[Int]
+                              )
+final case class GetAllDeviceResponseDTO(allDevices: Seq[DeviceInfoDTO])

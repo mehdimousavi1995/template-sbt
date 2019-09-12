@@ -21,11 +21,13 @@ trait JsonSerializer extends HttpImplicitConversions {
   implicit val deviceResponseDTOFormat: RootJsonFormat[DeviceResponseDTO] = jsonFormat4(DeviceResponseDTO)
   implicit val responseFormat: RootJsonFormat[SuccessResponse] = jsonFormat1(SuccessResponse)
 
-  implicit val deviceStatusRequestFormat: RootJsonFormat[DeviceStatusRequest] = jsonFormat4(DeviceStatusRequest)
+  implicit val deviceStatusRequestFormat: RootJsonFormat[DeviceStatusDTO] = jsonFormat4(DeviceStatusDTO)
   implicit val deviceStatusResponseFormat: RootJsonFormat[DeviceStatusResponse] = jsonFormat1(DeviceStatusResponse)
 
   implicit val getDeviceStatusResponseFormat: RootJsonFormat[GetDeviceStatusResponse] = jsonFormat2(GetDeviceStatusResponse)
 
+  implicit val deviceInfoResponseDTOFormat: RootJsonFormat[DeviceInfoDTO] = jsonFormat5(DeviceInfoDTO)
+  implicit val getAllDeviceResponseDTOFormat: RootJsonFormat[GetAllDeviceResponseDTO] = jsonFormat1(GetAllDeviceResponseDTO)
 
 
 }

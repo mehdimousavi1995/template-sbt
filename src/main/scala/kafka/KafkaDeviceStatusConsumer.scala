@@ -8,7 +8,7 @@ import akka.stream.ActorMaterializer
 import com.typesafe.config.Config
 import homeee.HomeExtension
 import http.JsonSerializer
-import http.entities.DeviceStatusRequest
+import http.entities.DeviceStatusDTO
 import org.apache.kafka.clients.consumer.ConsumerConfig
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
@@ -43,7 +43,7 @@ case class KafkaDeviceStatusConsumer()(implicit system: ActorSystem) extends Jso
       Subscriptions.topics(topics)
     ).mapAsync(parallelLimit)(flow).runForeach {
       case (publishedMessage: String, _: Option[Int]) ⇒
-        val statusRequest: DeviceStatusRequest = publishedMessage.parseJson.convertTo[DeviceStatusRequest]
+        val statusRequest: DeviceStatusDTO = publishedMessage.parseJson.convertTo[DeviceStatusDTO]
         homeExt.deviceStatus(statusRequest.homeId.toString, statusRequest.deviceId.toString, statusRequest.status, statusRequest.optTemp).map { _ =>
           system.log.info("published device status to kafka, homeId: {}, deviceId: {}, status: {}",
             statusRequest.homeId, statusRequest.deviceId, statusRequest.status)

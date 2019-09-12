@@ -1,6 +1,7 @@
 package http
 
 import java.time.LocalDateTime
+import java.util.UUID
 
 import http.entities._
 import kafka.{KafkaExtension, KafkaManager}
@@ -96,7 +97,7 @@ trait HttpRequestHandler extends AuthenticationHelper
     } yield DeviceResponseDTO(device.deviceId, device.homeId, device.deviceName, device.deviceType)).value
   }
 
-  def publishStatusToKafka(request: DeviceStatusRequest): Future[HttpError Either DeviceStatusResponse] = {
+  def publishStatusToKafka(request: DeviceStatusDTO): Future[HttpError Either DeviceStatusResponse] = {
     (for {
       _ <- fromFutureOption(DeviceNotFound)(deviceService.findById(partitionKey, request.deviceId))
       _ <- fromFutureOption(HomeNotFound)(homeService.findById(partitionKey, request.homeId))
@@ -109,6 +110,14 @@ trait HttpRequestHandler extends AuthenticationHelper
     (for {
       device <- fromFuture(homeExt.getDeviceStatus(homeId, deviceId))
     } yield GetDeviceStatusResponse(device.status, device.optTemp)).value
+  }
+
+  def getDevices(homeId: String): Future[HttpError Either GetAllDeviceResponseDTO] = {
+    (for {
+      _ <- fromFutureOption(HomeNotFound)(homeService.findById(partitionKey, UUID.fromString(homeId)))
+      devices <- fromFuture(homeExt.getAllDevices(homeId).map(_.devices))
+    }yield  GetAllDeviceResponseDTO(devices)).value
+
   }
 
 }

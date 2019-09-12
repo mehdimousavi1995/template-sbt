@@ -90,7 +90,7 @@ class HttpServiceRoutes()(implicit val system: ActorSystem) extends HttpHandler
       }
     } ~ path("status") {
       post {
-        entity(as[DeviceStatusRequest]) { request =>
+        entity(as[DeviceStatusDTO]) { request =>
           onComplete(publishStatusToKafka(request)) {
             generateHttpResponse("status")
           }
@@ -102,6 +102,11 @@ class HttpServiceRoutes()(implicit val system: ActorSystem) extends HttpHandler
           generateHttpResponse("get status")
         }
       }
+    } ~ path("homes"/ Segment / "devices") { homeId =>
+      onComplete(getDevices(homeId)) {
+        generateHttpResponse("get devices")
+      }
+
     }
   }
 

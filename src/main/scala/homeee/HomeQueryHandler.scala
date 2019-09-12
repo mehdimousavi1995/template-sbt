@@ -1,9 +1,9 @@
 package homeee
 
-import http.entities.GetDeviceStatusResponse
-import messages.homeee.homessages.HomeQuries.{GetDevice, GetDeviceResponse, GetDeviceStatus, GetHome, GetHomeResponse}
+import messages.homeee.homessages.HomeQuries.{GetAllDevices, GetAllDevicesResponse, GetDevice, GetDeviceResponse, GetDeviceStatus, GetDeviceStatusResponse, GetHome, GetHomeResponse}
 import messages.homeee.homessages.{AllDevices, HeaterCoolerState, OnOrOffStatus}
 import main.Constant._
+
 import scala.concurrent.Future
 
 private trait HomeQueryHandler extends DeviceHelper {
@@ -45,6 +45,11 @@ private trait HomeQueryHandler extends DeviceHelper {
       val (status, optTemp) = getDeviceStatus(device.head)
       Future.successful(GetDeviceStatusResponse(status, optTemp))
     } else Future.failed(new RuntimeException("there is no device with id: " + gds.deviceId + "for home: " + gds.homeId))
+  }
+
+
+  def getAllDevices(q: GetAllDevices): Future[GetAllDevicesResponse] = {
+    Future.successful(GetAllDevicesResponse(state.devices))
   }
 
 }
