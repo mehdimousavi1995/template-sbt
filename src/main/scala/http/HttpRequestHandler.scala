@@ -1,10 +1,10 @@
 package http
 
 import java.time.LocalDateTime
-import java.util.UUID
 
 import http.entities._
 import kafka.{KafkaExtension, KafkaManager}
+import main.Constant._
 import messages.homeee.homessages._
 import persist.cassandra.device.Device
 import persist.cassandra.home.Home
@@ -74,14 +74,15 @@ trait HttpRequestHandler extends AuthenticationHelper
     }
   }
 
+
   def createDeviceWith(request: Device): AllDevices = {
     request.deviceType match {
-      case "LAMP" =>
+      case LAMP =>
         val lamp = LampDevice(request.deviceId.toString, request.deviceName, OnOrOffStatus.OFF)
         AllDevices().withLampDevice(lamp)
-      case "HEATER_COOLER" =>
-        val heatingCooler = HeatingCooler(request.deviceId.toString, request.deviceName, HeatingCoolerState.OFFLINE, 0)
-        AllDevices().withHeatingCooler(heatingCooler)
+      case HEATER_COOLER =>
+        val heaterCooler = HeaterCooler(request.deviceId.toString, request.deviceName, HeaterCoolerState.OFFLINE, 0)
+        AllDevices().withHeaterCooler(heaterCooler)
     }
   }
 
@@ -99,6 +100,7 @@ trait HttpRequestHandler extends AuthenticationHelper
     (for {
       _ <- fromFutureOption(DeviceNotFound)(deviceService.findById(partitionKey, request.deviceId))
       _ <- fromFutureOption(HomeNotFound)(homeService.findById(partitionKey, request.homeId))
+      _ <- fromBoolean(InvalidDeviceStatus)(List(OFF, ON, HEATER, COOLER).contains(request.status))
       _ <- fromFuture(kafkaExt.publish(deviceStatusTopic, kafkaKey, request.toJson.toString))
     } yield DeviceStatusResponse()).value
   }

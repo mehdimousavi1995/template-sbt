@@ -1,4 +1,4 @@
-
+package main
 
 import akka.actor.ActorSystem
 import akka.cluster.Cluster

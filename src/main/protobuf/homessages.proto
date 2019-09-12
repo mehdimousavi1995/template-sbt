@@ -21,14 +21,13 @@ message Owner {
 enum OnOrOffStatus {
     OFF = 0;
     ON = 1;
-    BROKEN = 2;
 }
 
 
 message AllDevices {
     oneof value {
         LampDevice lamp_device = 1;
-        HeatingCooler heating_cooler = 2;
+        HeaterCooler heater_cooler = 2;
     }
 }
 
@@ -40,17 +39,17 @@ message LampDevice {
     option (scalapb.message).extends = "homeee.Device";
 }
 
-enum HeatingCoolerState {
+enum HeaterCoolerState {
     COOLER = 0;
-    HEATING = 1;
+    HEATER = 1;
     OFFLINE = 2;
 }
 
 
-message HeatingCooler {
+message HeaterCooler {
     required string device_id = 1;
     required string device_name = 2;
-    required HeatingCoolerState heating_cooler_state = 3;
+    required HeaterCoolerState heater_cooler_state = 3;
     required int32 temperature = 4;
 
     option (scalapb.message).extends = "homeee.Device";
@@ -93,6 +92,7 @@ message HomeCommands {
         option (scalapb.message).extends = "homeee.HomeCommand";
         required string device_id = 2;
         required string status = 3;
+        optional int32 opt_temp = 4;
     }
 
 

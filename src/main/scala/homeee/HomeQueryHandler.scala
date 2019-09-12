@@ -2,8 +2,8 @@ package homeee
 
 import http.entities.GetDeviceStatusResponse
 import messages.homeee.homessages.HomeQuries.{GetDevice, GetDeviceResponse, GetDeviceStatus, GetHome, GetHomeResponse}
-import messages.homeee.homessages.{AllDevices, HeatingCoolerState, OnOrOffStatus}
-
+import messages.homeee.homessages.{AllDevices, HeaterCoolerState, OnOrOffStatus}
+import main.Constant._
 import scala.concurrent.Future
 
 private trait HomeQueryHandler extends DeviceHelper {
@@ -16,18 +16,17 @@ private trait HomeQueryHandler extends DeviceHelper {
   def getDeviceStatus(device: AllDevices): (String, Option[Int]) = device match {
     case AllDevices(d) if d.isDefined && d.isLampDevice =>
       (d.lampDevice.get.onOrOffStatus match {
-        case OnOrOffStatus.BROKEN => "BROKEN"
-        case OnOrOffStatus.OFF => "OFF"
-        case OnOrOffStatus.ON => "ON"
+        case OnOrOffStatus.OFF => OFF
+        case OnOrOffStatus.ON => ON
         case _ => ""
       }, None)
-    case AllDevices(d) if d.isDefined && d.isHeatingCooler =>
-      val heatingCooler = d.heatingCooler.get
-      (heatingCooler.heatingCoolerState match {
-        case HeatingCoolerState.COOLER => "COOLER"
-        case HeatingCoolerState.HEATING => "HEATING"
-        case HeatingCoolerState.OFFLINE => "OFF"
-      }, Some(heatingCooler.temperature))
+    case AllDevices(d) if d.isDefined && d.isHeaterCooler =>
+      val HeaterCooler = d.heaterCooler.get
+      (HeaterCooler.heaterCoolerState match {
+        case HeaterCoolerState.COOLER => COOLER
+        case HeaterCoolerState.HEATER => HEATER
+        case HeaterCoolerState.OFFLINE => OFF
+      }, Some(HeaterCooler.temperature))
   }
 
   def getDevice(gd: GetDevice): Future[GetDeviceResponse] = {
@@ -36,8 +35,8 @@ private trait HomeQueryHandler extends DeviceHelper {
 
   def getDeviceStatus(gds: GetDeviceStatus): Future[GetDeviceStatusResponse] = {
     val device = state.devices.filter {
-      case AllDevices(d) if d.isDefined && d.isHeatingCooler =>
-        d.heatingCooler.get.deviceId == gds.deviceId
+      case AllDevices(d) if d.isDefined && d.isHeaterCooler =>
+        d.heaterCooler.get.deviceId == gds.deviceId
       case AllDevices(d) if d.isDefined && d.isLampDevice =>
         d.lampDevice.get.deviceId == gds.deviceId
       case _ => false

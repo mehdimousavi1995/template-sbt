@@ -18,7 +18,7 @@ trait HomeExtension extends Extension {
 
   def removeDevice(homeId: String, deviceId: String): Future[Any]
 
-  def deviceStatus(homeId: String, deviceId: String, status: String): Future[Any]
+  def deviceStatus(homeId: String, deviceId: String, status: String, optTemp: Option[Int]): Future[Any]
 
 
   def getHome(homeId: String): Future[GetHomeResponse]

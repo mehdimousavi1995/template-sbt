@@ -64,7 +64,7 @@ object HomeProcessor {
       95851 → classOf[AllDevices],
       95852 → classOf[HomeSnapShot],
       95853 → classOf[LampDevice],
-      95854 → classOf[HeatingCooler]
+      95854 → classOf[HeaterCooler]
     )
 
   def persistenceIdFor(homeId: String): String = s"Home-$homeId"

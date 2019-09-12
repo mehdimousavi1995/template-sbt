@@ -43,7 +43,7 @@ private trait HomeCommandHandler {
 
   def deviceStatus(ds: DeviceStatus): Unit = {
     val replyTo = sender()
-    persist(DeviceStatusChanged(ds.deviceId, Instant.now(), ds.status)) { evt =>
+    persist(DeviceStatusChanged(ds.deviceId, Instant.now(), ds.status, ds.optTemp)) { evt =>
       commit(evt)
       log.info("Device Status changed from home: {}, device: {}", homeUserId, ds.deviceId)
       replyTo ! ResponseVoid

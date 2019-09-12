@@ -40,3 +40,8 @@ case object DeviceNotFound extends HttpError {
   override val code: Int = 404
   override val error: String = "DEVICE_NOT_FOUND"
 }
+
+case object InvalidDeviceStatus extends HttpError {
+  override val code: Int = 400
+  override val error: String = "INVALID_DEVICE_STATUS, DEVICE_STATUS_SHOULD_BE_ONE_OF: {OFF, ON, HEATER, COOLER}"
+}

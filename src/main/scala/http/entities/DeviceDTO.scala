@@ -1,13 +1,14 @@
 package http.entities
 
 import java.util.UUID
+import main.Constant._
 
 final case class DeviceDTO(
                          deviceName: String,
                          deviceType: String,
                          homeId: UUID
                        ) {
-  require(deviceType == "LAMP" || deviceType == "HEATER_COOLER")
+  require(deviceType == LAMP || deviceType == HEATER_COOLER)
 }
 
 final case class DeviceResponseDTO(

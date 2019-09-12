@@ -24,8 +24,8 @@ final class HomeExtensionImp(system: ActorSystem) extends HomeExtension {
   override def createHome(homeId: String, owner: Owner, address: String, houseArea: Int, createdAt: Long): Future[Any] =
     (hp ? CreateHome(homeId, owner, address, houseArea)).mapTo[Any]
 
-  override def deviceStatus(homeId: String, deviceId: String, status: String): Future[Any] =
-    (hp ? DeviceStatus(homeId, deviceId, status)).mapTo[Any]
+  override def deviceStatus(homeId: String, deviceId: String, status: String, optTemp: Option[Int]): Future[Any] =
+    (hp ? DeviceStatus(homeId, deviceId, status, optTemp)).mapTo[Any]
 
   override def addDevice(homeId: String, device: AllDevices): Future[Any] =
     (hp ? AddDevice(homeId, device)).mapTo[Any]

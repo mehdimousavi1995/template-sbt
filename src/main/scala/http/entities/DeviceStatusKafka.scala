@@ -1,6 +1,7 @@
 package http.entities
 
 import java.util.UUID
+import main.Constant._
 
 
 case class DeviceStatusRequest(
@@ -9,8 +10,8 @@ case class DeviceStatusRequest(
                                 status: String,
                                 optTemp: Option[Int] = None) {
   require(
-    (optTemp.isDefined && (status == "OFF" || status == "HEATER" || status == "COOLER")) ||
-      (optTemp.isEmpty && (status == "OFF" || status == "ON")),
+    (optTemp.isDefined && (status == OFF || status == HEATER || status == COOLER)) ||
+      (optTemp.isEmpty && (status == OFF || status == ON)),
     "INVALID_INPUT_BY_CLIENT"
   )
 }

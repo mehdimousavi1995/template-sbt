@@ -44,7 +44,7 @@ case class KafkaDeviceStatusConsumer()(implicit system: ActorSystem) extends Jso
     ).mapAsync(parallelLimit)(flow).runForeach {
       case (publishedMessage: String, _: Option[Int]) ⇒
         val statusRequest: DeviceStatusRequest = publishedMessage.parseJson.convertTo[DeviceStatusRequest]
-        homeExt.deviceStatus(statusRequest.homeId.toString, statusRequest.deviceId.toString, statusRequest.status).map { _ =>
+        homeExt.deviceStatus(statusRequest.homeId.toString, statusRequest.deviceId.toString, statusRequest.status, statusRequest.optTemp).map { _ =>
           system.log.info("published device status to kafka, homeId: {}, deviceId: {}, status: {}",
             statusRequest.homeId, statusRequest.deviceId, statusRequest.status)
         }
