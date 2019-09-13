@@ -45,68 +45,70 @@ class HttpServiceRoutes()(implicit val system: ActorSystem) extends HttpHandler
   protected val redisExt = RedisExtension(system)
 
 
-  override def routes: Route = extractClientIP { ip =>
+  override def routes: Route = respondWithDefaultHeaders(corsHeaders) {
+    extractClientIP { ip =>
 
-    path("houses") {
-      post {
-        entity(as[CreateHomeDTO]) { request =>
-          onComplete(createHome(request)) {
-            generateHttpResponse("create home")
+      path("houses") {
+        post {
+          entity(as[CreateHomeDTO]) { request =>
+            onComplete(createHome(request)) {
+              generateHttpResponse("create home")
+            }
           }
         }
-      }
-    } ~ path("owners") {
-      post {
-        entity(as[CreateOwnerDTO]) { request =>
-          onComplete(createOwner(request)) {
-            generateHttpResponse("create owner")
+      } ~ path("owners") {
+        post {
+          entity(as[CreateOwnerDTO]) { request =>
+            onComplete(createOwner(request)) {
+              generateHttpResponse("create owner")
+            }
           }
         }
-      }
-    } ~ path("devices") {
-      post {
-        entity(as[DeviceDTO]) { request =>
-          onComplete(createDevices(request)) {
-            generateHttpResponse("crated devices")
+      } ~ path("devices") {
+        post {
+          entity(as[DeviceDTO]) { request =>
+            onComplete(createDevices(request)) {
+              generateHttpResponse("crated devices")
+            }
           }
         }
-      }
 
-    } ~ path("users") {
-      post {
-        entity(as[UserRequest]) { request =>
-          onComplete(createUser(request)) {
-            generateHttpResponse("create user")
+      } ~ path("users") {
+        post {
+          entity(as[UserRequest]) { request =>
+            onComplete(createUser(request)) {
+              generateHttpResponse("create user")
+            }
           }
         }
-      }
-    } ~ path("auths") {
-      post {
-        entity(as[LoginRequest]) { request =>
-          onComplete(login(request)) {
-            generateHttpResponse("login")
+      } ~ path("auths") {
+        post {
+          entity(as[LoginRequest]) { request =>
+            onComplete(login(request)) {
+              generateHttpResponse("login")
+            }
           }
         }
-      }
-    } ~ path("status") {
-      post {
-        entity(as[DeviceStatusDTO]) { request =>
-          onComplete(publishStatusToKafka(request)) {
-            generateHttpResponse("status")
+      } ~ path("status") {
+        post {
+          entity(as[DeviceStatusDTO]) { request =>
+            onComplete(publishStatusToKafka(request)) {
+              generateHttpResponse("status")
+            }
           }
         }
-      }
-    } ~ path("homes" / Segment / "devices" / Segment) { (homeId, deviceId) =>
-      get {
-        onComplete(getStatus(homeId, deviceId)) {
-          generateHttpResponse("get status")
+      } ~ path("homes" / Segment / "devices" / Segment) { (homeId, deviceId) =>
+        get {
+          onComplete(getStatus(homeId, deviceId)) {
+            generateHttpResponse("get status")
+          }
         }
-      }
-    } ~ path("homes"/ Segment / "devices") { homeId =>
-      onComplete(getDevices(homeId)) {
-        generateHttpResponse("get devices")
-      }
+      } ~ path("homes"/ Segment / "devices") { homeId =>
+        onComplete(getDevices(homeId)) {
+          generateHttpResponse("get devices")
+        }
 
+      }
     }
   }
 
