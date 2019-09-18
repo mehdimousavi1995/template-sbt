@@ -28,6 +28,7 @@ trait HomeExtension extends Extension {
 
   def getAllDevices(homeId: String): Future[GetAllDevicesResponse]
 
+  def getRunningOnHost(homeId: String): Future[String]
 }
 
 object HomeExtension extends ExtensionId[HomeExtension] with ExtensionIdProvider {

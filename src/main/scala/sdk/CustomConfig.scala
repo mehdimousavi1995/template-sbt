@@ -5,7 +5,10 @@ import java.nio.file.{Files, Paths}
 import com.typesafe.config.{Config, ConfigFactory}
 
 object CustomConfig {
-  private val configPath = Paths.get("conf/server.conf")
+
+//  private val configPath = Paths.get("conf/server.conf")
+  private val configPath = Paths.get("conf/server2.conf")
+
   private val absolutePath =
     if (configPath.isAbsolute) configPath
     else Paths.get(".").toAbsolutePath.normalize().resolve(configPath).toAbsolutePath.normalize

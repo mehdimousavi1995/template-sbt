@@ -10,7 +10,7 @@ import cqrs.{IncrementalSnapshots, Processor, TaggedEvent}
 import im.actor.serialization.ActorSerializer
 import messages.homeee.homessages.AllDevices.Value.LampDevice
 import messages.homeee.homessages.HomeCommands.{AddDevice, CreateHome, DeviceStatus, RemoveDevice}
-import messages.homeee.homessages.HomeQuries.{GetAllDevices, GetDevice, GetDeviceStatus, GetHome}
+import messages.homeee.homessages.HomeQuries.{GetAllDevices, GetDevice, GetDeviceStatus, GetHome, GetRunningOnHost}
 import messages.homeee.homessages._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -54,7 +54,6 @@ object HomeProcessor {
       85855 -> classOf[HomeQuries.GetDeviceStatusResponse],
 
 
-
       85950 → classOf[HomeEvents.HomeCreated],
       85951 → classOf[HomeEvents.DeviceAdded],
       85952 → classOf[HomeEvents.DeviceRemoved],
@@ -80,7 +79,7 @@ private final class HomeProcessor
     with Stash
     with ActorLogging {
 
-  private val conf = ConfigFactory.load()
+  protected val conf = ConfigFactory.load()
   protected implicit val system: ActorSystem = context.system
   protected implicit val ec: ExecutionContext = context.dispatcher
   protected implicit val timeout: Timeout = Timeout(60, TimeUnit.SECONDS)
@@ -108,6 +107,7 @@ private final class HomeProcessor
     case q: GetDevice => getDevice(q)
     case q: GetDeviceStatus => getDeviceStatus(q)
     case q: GetAllDevices => getAllDevices(q)
+    case q: GetRunningOnHost => getRunningHost(q)
   }
 
 }

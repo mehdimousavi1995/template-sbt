@@ -1,6 +1,6 @@
 package homeee
 
-import messages.homeee.homessages.HomeQuries.{GetAllDevices, GetAllDevicesResponse, GetDevice, GetDeviceResponse, GetDeviceStatus, GetDeviceStatusResponse, GetHome, GetHomeResponse}
+import messages.homeee.homessages.HomeQuries.{GetAllDevices, GetAllDevicesResponse, GetDevice, GetDeviceResponse, GetDeviceStatus, GetDeviceStatusResponse, GetHome, GetHomeResponse, GetRunningOnHost, GetRunningOnHostResponse}
 import messages.homeee.homessages.{AllDevices, HeaterCoolerState, OnOrOffStatus}
 import main.Constant._
 
@@ -52,4 +52,8 @@ private trait HomeQueryHandler extends DeviceHelper {
     Future.successful(GetAllDevicesResponse(state.devices))
   }
 
+  def getRunningHost(q: GetRunningOnHost): Future[GetRunningOnHostResponse] = {
+    val nodeId = conf.getString("node-id-in-cluster")
+    Future.successful(GetRunningOnHostResponse(nodeId))
+  }
 }

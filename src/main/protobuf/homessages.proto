@@ -143,6 +143,15 @@ message HomeQuries {
         optional int32 opt_temp = 2;
     }
 
+    message GetRunningOnHost {
+        required string home_id = 1;
+        option (scalapb.message).extends = "homeee.HomeQuery";
+    }
+
+    message GetRunningOnHostResponse {
+        required string node_id = 1;
+    }
+
 }
 
 message HomeEvents {

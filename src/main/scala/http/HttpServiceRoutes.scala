@@ -108,6 +108,10 @@ class HttpServiceRoutes()(implicit val system: ActorSystem) extends HttpHandler
           generateHttpResponse("get devices")
         }
 
+      } ~ path("homes" / "runningNode" / Segment) { homeId =>
+        onComplete(homeExt.getRunningOnHost(homeId)) { response =>
+          complete(response)
+        }
       }
     }
   }
